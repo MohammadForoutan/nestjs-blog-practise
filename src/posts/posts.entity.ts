@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/auth/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Post {
@@ -15,4 +16,7 @@ export class Post {
 
   @Column()
   isPublish: boolean;
+
+  @ManyToOne(() => User, (user) => user.post)
+  user: User;
 }
