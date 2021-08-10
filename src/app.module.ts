@@ -19,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
       database: 'blog',
       autoLoadEntities: true, // add entities to entities array which they're register with forFeature method
       // entities: ['**/*.entity.ts'],
-      // synchronize: true, // for development
+      synchronize: true, // for development
     }),
   ],
   controllers: [AppController],
