@@ -6,6 +6,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePublishStatusDto } from './dto/update-publish.dto';
 import { Post } from './posts.entity';
 import { PostsRepository } from './posts.repository';
+import { PUBLISH_STATUS } from './publish-status.enum';
 
 @Injectable()
 export class PostsService {
@@ -13,12 +14,12 @@ export class PostsService {
     @InjectRepository(PostsRepository) private postsRepository: PostsRepository,
   ) {}
 
-  public getAllPosts(): Promise<Post[]> {
-    return this.postsRepository.getAllPosts();
+  public getAllPosts(user: User): Promise<Post[]> {
+    return this.postsRepository.getAllPosts(user);
   }
 
-  public async getPostById(id: string): Promise<Post> {
-    const post = await this.postsRepository.getPostById(id);
+  public async getPostById(id: string, user: User): Promise<Post> {
+    const post = await this.postsRepository.getPostById(id, user);
     if (!post) {
       throw new NotFoundException(`Post with ${id} was not found.`);
     }
@@ -43,15 +44,15 @@ export class PostsService {
 
   public async updatePublishStatus(
     id: string,
-    publishStatus: UpdatePublishStatusDto,
+    publishUpdate: UpdatePublishStatusDto,
     user: User,
   ): Promise<void> {
-    const { publish } = publishStatus;
-    const post = await this.postsRepository.findOne({ id, user });
+    const { publishStatus } = publishUpdate;
+    const post = await this.postsRepository.getPostById(id, user);
 
-    if (publish === 'true') {
+    if (publishStatus === PUBLISH_STATUS.PUBLIC) {
       post.isPublish = true;
-    } else if (publish === 'false') {
+    } else if (publishStatus === PUBLISH_STATUS.HIDDEN) {
       post.isPublish = false;
     }
 

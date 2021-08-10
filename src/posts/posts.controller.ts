@@ -30,26 +30,32 @@ export class PostsController {
   }
 
   @Get()
-  public getAllPosts(): Promise<PostEntity[]> {
-    return this.postService.getAllPosts();
+  public getAllPosts(@GetUser() user: User): Promise<PostEntity[]> {
+    return this.postService.getAllPosts(user);
   }
 
   @Get('/:id')
-  public getPostById(@Param() id: string): Promise<PostEntity> {
-    return this.postService.getPostById(id);
+  public getPostById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<PostEntity> {
+    return this.postService.getPostById(id, user);
   }
 
   @Delete('/:id')
-  public deletePost(@Param() id: string, @GetUser() user: User): Promise<void> {
+  public deletePost(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<void> {
     return this.postService.deletePost(id, user);
   }
 
   @Patch('/:id/publish-status')
   public updatePublishStatus(
-    @Param() id: string,
-    @Body() publishStatus: UpdatePublishStatusDto,
+    @Param('id') id: string,
+    @Body() publishUpdate: UpdatePublishStatusDto,
     @GetUser() user: User,
   ): Promise<void> {
-    return this.postService.updatePublishStatus(id, publishStatus, user);
+    return this.postService.updatePublishStatus(id, publishUpdate, user);
   }
 }

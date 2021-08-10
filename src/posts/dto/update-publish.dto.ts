@@ -1,6 +1,7 @@
-import { IsString } from 'class-validator';
+import { IsEnum } from 'class-validator';
+import { PUBLISH_STATUS } from '../publish-status.enum';
 
 export class UpdatePublishStatusDto {
-  @IsString()
-  publish: string;
+  @IsEnum(PUBLISH_STATUS)
+  publishStatus: string;
 }

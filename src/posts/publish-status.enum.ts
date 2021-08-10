@@ -1,0 +1,4 @@
+export enum PUBLISH_STATUS {
+  PUBLIC = 'PUBLISH',
+  HIDDEN = 'HIDDEN',
+}

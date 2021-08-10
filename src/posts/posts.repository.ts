@@ -18,12 +18,12 @@ export class PostsRepository extends Repository<Post> {
     return post;
   }
 
-  public async getAllPosts(): Promise<Post[]> {
-    return await this.find();
+  public async getAllPosts(user: User): Promise<Post[]> {
+    return await this.find({ user });
   }
 
-  public async getPostById(id: string): Promise<Post> {
-    return await this.findOne(id);
+  public async getPostById(id: string, user: User): Promise<Post> {
+    return await this.findOne({ id, user });
   }
 
   public async deletePost(id: string, user: User): Promise<DeleteResult> {
