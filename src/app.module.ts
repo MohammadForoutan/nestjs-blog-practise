@@ -7,18 +7,20 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     PostsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
+      // name: 'blog-postgres-nestjs-practise', // NO NEED
       host: '127.0.0.1',
       port: 5432,
       username: 'postgres',
       password: '36113611',
       database: 'blog',
-      autoLoadEntities: true,
-      synchronize: true,
+      autoLoadEntities: true, // add entities to entities array which they're register with forFeature method
+      // entities: ['**/*.entity.ts'],
+      // synchronize: true, // for development
     }),
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
