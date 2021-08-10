@@ -6,13 +6,15 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
 import { Post as PostEntity } from './posts.entity';
-import { DeleteResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('posts')
+@UseGuards(AuthGuard())
 export class PostsController {
   constructor(private postService: PostsService) {}
 
