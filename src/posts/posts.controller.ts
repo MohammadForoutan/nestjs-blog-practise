@@ -17,11 +17,11 @@ import { User } from 'src/auth/user.entity';
 import { UpdatePublishStatusDto } from './dto/update-publish.dto';
 
 @Controller('posts')
-@UseGuards(AuthGuard())
 export class PostsController {
   constructor(private postService: PostsService) {}
 
   @Post()
+  @UseGuards(AuthGuard())
   public createPost(
     @Body() createPostDto: CreatePostDto,
     @GetUser() user: User,
@@ -35,14 +35,12 @@ export class PostsController {
   }
 
   @Get('/:id')
-  public getPostById(
-    @Param('id') id: string,
-    @GetUser() user: User,
-  ): Promise<PostEntity> {
-    return this.postService.getPostById(id, user);
+  public getPostById(@Param('id') id: string): Promise<PostEntity> {
+    return this.postService.getPostById(id);
   }
 
   @Delete('/:id')
+  @UseGuards(AuthGuard())
   public deletePost(
     @Param('id') id: string,
     @GetUser() user: User,
@@ -51,6 +49,7 @@ export class PostsController {
   }
 
   @Patch('/:id/publish-status')
+  @UseGuards(AuthGuard())
   public updatePublishStatus(
     @Param('id') id: string,
     @Body() publishUpdate: UpdatePublishStatusDto,
