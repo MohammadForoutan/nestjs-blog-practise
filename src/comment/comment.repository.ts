@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { Post } from 'src/posts/posts.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
@@ -19,6 +20,11 @@ export class CommentRepository extends Repository<Comment> {
   }
 
   public async deleteComment(id: string, user: User): Promise<DeleteResult> {
-    return await this.delete({ id, user });
+    const result: DeleteResult = await this.delete({ id, user });
+
+    if (result.affected) {
+      throw new NotFoundException(`comment with ${id} not found.`);
+    }
+    return result;
   }
 }
