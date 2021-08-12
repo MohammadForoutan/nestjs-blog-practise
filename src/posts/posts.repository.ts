@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -10,20 +11,23 @@ export class PostsRepository extends Repository<Post> {
     user: User,
   ): Promise<Post> {
     const { title, body } = createPostDto;
-
-    const post: Post = this.create({ title, body, isPublish: false });
-    post.user = user;
-
-    await this.save(post);
-    return post;
+    const post: Post = this.create({ title, body, isPublish: false, user });
+    return await this.save(post);
   }
 
-  public async getAllPosts(user: User): Promise<Post[]> {
-    return await this.find({ user });
+  public async getAllPosts(): Promise<Post[]> {
+    return await this.find();
   }
 
   public async getPostById(id: string, user: User): Promise<Post> {
-    return await this.findOne({ id, user });
+    const post: Post = await this.findOne(id);
+
+    // if not found or don't show hidden post for others(not owner)
+    if (!post || (post.user !== user && !post.isPublish)) {
+      throw new NotFoundException(`post with ${id} not found.`);
+    }
+
+    return post;
   }
 
   public async deletePost(id: string, user: User): Promise<DeleteResult> {

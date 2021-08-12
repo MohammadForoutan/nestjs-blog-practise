@@ -14,21 +14,16 @@ export class PostsService {
     @InjectRepository(PostsRepository) private postsRepository: PostsRepository,
   ) {}
 
-  public getAllPosts(user: User): Promise<Post[]> {
-    return this.postsRepository.getAllPosts(user);
+  public createPost(createPostDto: CreatePostDto, user: User): Promise<Post> {
+    return this.postsRepository.createPost(createPostDto, user);
+  }
+
+  public getAllPosts(): Promise<Post[]> {
+    return this.postsRepository.getAllPosts();
   }
 
   public async getPostById(id: string, user: User): Promise<Post> {
-    const post = await this.postsRepository.getPostById(id, user);
-    if (!post) {
-      throw new NotFoundException(`Post with ${id} was not found.`);
-    }
-
-    return post;
-  }
-
-  public createPost(createPostDto: CreatePostDto, user: User): Promise<Post> {
-    return this.postsRepository.createPost(createPostDto, user);
+    return await this.postsRepository.getPostById(id, user);
   }
 
   public async deletePost(id: string, user: User): Promise<void> {
@@ -44,11 +39,11 @@ export class PostsService {
 
   public async updatePublishStatus(
     id: string,
-    publishUpdate: UpdatePublishStatusDto,
+    publishUpdateDto: UpdatePublishStatusDto,
     user: User,
   ): Promise<void> {
-    const { publishStatus } = publishUpdate;
-    const post = await this.postsRepository.getPostById(id, user);
+    const { publishStatus } = publishUpdateDto;
+    const post = await this.postsRepository.findOne({ id, user });
 
     if (publishStatus === PUBLISH_STATUS.PUBLIC) {
       post.isPublish = true;

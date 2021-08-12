@@ -1,6 +1,13 @@
 import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/auth/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Comment } from 'src/comment/comment.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Post {
@@ -19,4 +26,7 @@ export class Post {
 
   @ManyToOne(() => User, (user) => user.post)
   user: User;
+
+  @OneToMany(() => Comment, (comment: Comment) => comment.post)
+  comments: Comment[];
 }
