@@ -19,7 +19,7 @@ export class CommentService {
     user: User,
     postId: string,
   ): Promise<void> {
-    const post: Post = await this.postRepository.getPostById(postId);
+    const post: Post = await this.postRepository.getPostById(postId, user);
     this.commentRepository.createComment(createPostDto, user, post);
   }
 
