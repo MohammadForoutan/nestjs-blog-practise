@@ -4,11 +4,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
     AuthModule,
     PostsModule,
+    CommentModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       // name: 'blog-postgres-nestjs-practise', // NO NEED
