@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
-import { DeleteResult } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePublishStatusDto } from './dto/update-publish.dto';
 import { Post } from './posts.entity';
@@ -27,14 +26,7 @@ export class PostsService {
   }
 
   public async deletePost(id: string, user: User): Promise<void> {
-    const result: DeleteResult = await this.postsRepository.deletePost(
-      id,
-      user,
-    );
-
-    if (!result.affected) {
-      throw new NotFoundException(`Post with ${id} was not found.`);
-    }
+    await this.postsRepository.deletePost(id, user);
   }
 
   public async updatePublishStatus(
