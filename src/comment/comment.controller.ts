@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Patch,
   Post,
@@ -11,8 +12,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { CreatePostDto } from 'src/posts/dto/create-post.dto';
-import { DeleteResult } from 'typeorm';
+import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 UseGuards(AuthGuard());
 @Controller('comment')
@@ -24,15 +26,29 @@ export class CommentController {
     @Body() createPostDto: CreatePostDto,
     @Param('postId') postId: string,
     @GetUser() user: User,
-  ): Promise<void> {
+  ): Promise<Comment> {
     return this.commentService.createComment(createPostDto, user, postId);
   }
 
-  @Delete()
-  public deletePost(@Param('/:id') id: string, @GetUser() user: User) {
+  @Get('/post/:postId')
+  public getPostComments(
+    @Param('postId') postId: string,
+    @GetUser() user: User,
+  ): Promise<Comment[]> {
+    return this.commentService.getPostComments(postId, user);
+  }
+
+  @Delete('/:id')
+  public deletePost(@Param('id') id: string, @GetUser() user: User): void {
     this.commentService.deleteComment(id, user);
   }
 
-  //   @Patch()
-  //   public updateComment() {}
+  @Patch(':/id')
+  public updateComment(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+    @GetUser() user: User,
+  ): void {
+    this.commentService.updateComment(updateCommentDto, id, user);
+  }
 }

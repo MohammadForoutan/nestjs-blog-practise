@@ -4,6 +4,7 @@ import { Post } from 'src/posts/posts.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { Comment } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @EntityRepository(Comment)
 export class CommentRepository extends Repository<Comment> {
@@ -19,12 +20,23 @@ export class CommentRepository extends Repository<Comment> {
     return comment;
   }
 
-  public async deleteComment(id: string, user: User): Promise<DeleteResult> {
+  public async deleteComment(id: string, user: User): Promise<void> {
     const result: DeleteResult = await this.delete({ id, user });
 
     if (result.affected) {
       throw new NotFoundException(`comment with ${id} not found.`);
     }
-    return result;
+  }
+  public async updateComment(
+    updateCommentDto: UpdateCommentDto,
+    user: User,
+    id: string,
+  ): Promise<void> {
+    const { body } = updateCommentDto;
+    this.update({ id, user }, { body });
+  }
+
+  public async getPostComments(post: Post): Promise<Comment[]> {
+    return await this.find({ post });
   }
 }
