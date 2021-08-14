@@ -20,7 +20,7 @@ export class PostsRepository extends Repository<Post> {
   }
 
   public async getPostById(id: string, user: User): Promise<Post> {
-    const post: Post = await this.findOne(id);
+    const post: Post = await this.findOne({ id });
 
     // if not found or don't show hidden post for others(not owner)
     if (!post || (post.user !== user && !post.isPublish)) {

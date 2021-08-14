@@ -47,10 +47,7 @@ export class PostsController {
   // DELETE
   @Delete('/:id')
   @UseGuards(AuthGuard())
-  public deletePost(
-    @Param('id') id: string,
-    @GetUser() user: User,
-  ): Promise<void> {
+  public deletePost(@Param('id') id: string, @GetUser() user: User): void {
     return this.postService.deletePost(id, user);
   }
 

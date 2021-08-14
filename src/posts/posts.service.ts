@@ -21,12 +21,12 @@ export class PostsService {
     return this.postsRepository.getAllPosts();
   }
 
-  public async getPostById(id: string, user: User): Promise<Post> {
-    return await this.postsRepository.getPostById(id, user);
+  public getPostById(id: string, user: User): Promise<Post> {
+    return this.postsRepository.getPostById(id, user);
   }
 
-  public async deletePost(id: string, user: User): Promise<void> {
-    await this.postsRepository.deletePost(id, user);
+  public deletePost(id: string, user: User): void {
+    this.postsRepository.deletePost(id, user);
   }
 
   public async updatePublishStatus(
