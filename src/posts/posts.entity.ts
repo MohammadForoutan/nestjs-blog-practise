@@ -1,9 +1,12 @@
 import { IsNotEmpty } from 'class-validator';
 import { User } from 'src/auth/user.entity';
 import { Comment } from 'src/comment/comment.entity';
+import { Tag } from 'src/tag/tag.entity';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -29,4 +32,8 @@ export class Post {
 
   @OneToMany(() => Comment, (comment: Comment) => comment.post)
   comments: Comment[];
+
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags: Tag[];
 }
