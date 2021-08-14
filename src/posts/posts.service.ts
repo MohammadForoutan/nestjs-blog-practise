@@ -35,7 +35,7 @@ export class PostsService {
     user: User,
   ): Promise<void> {
     const { publishStatus } = publishUpdateDto;
-    const post = await this.postsRepository.findOne({ id, user });
+    const post = await this.postsRepository.getPostById(id, user);
 
     if (publishStatus === PUBLISH_STATUS.PUBLIC) {
       post.isPublish = true;
