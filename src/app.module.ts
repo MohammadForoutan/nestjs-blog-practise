@@ -5,12 +5,16 @@ import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
+import { TagModule } from './tag/tag.module';
+import { AdvertiseModule } from './advertise/advertise.module';
 
 @Module({
   imports: [
     AuthModule,
     PostsModule,
     CommentModule,
+    TagModule,
+    AdvertiseModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       // name: 'blog-postgres-nestjs-practise', // NO NEED
