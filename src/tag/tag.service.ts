@@ -20,8 +20,8 @@ export class TagService {
     return this.tagRepository.getAllTags();
   }
 
-  public updateTag(id: string, updateTagDto: UpdateTagDto): void {
-    this.tagRepository.updateTag(id, updateTagDto);
+  public updateTag(id: string, updateTagDto: UpdateTagDto, user: User): void {
+    this.tagRepository.updateTag(id, updateTagDto, user);
   }
 
   public deleteTag(id: string, user: User): void {

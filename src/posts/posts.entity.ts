@@ -36,4 +36,10 @@ export class Post {
   @ManyToMany(() => Tag)
   @JoinTable()
   tags: Tag[];
+
+  /*
+    like_count & like & views column should be added.
+    views will be detected with ip address and like with user(uuid)
+    for better performance & count likes we should add like_count column
+  */
 }
