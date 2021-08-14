@@ -1,7 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
 import { User } from 'src/auth/user.entity';
 import { Post } from 'src/posts/posts.entity';
-import { DeleteResult, EntityRepository, Repository } from 'typeorm';
+import {
+  DeleteResult,
+  EntityRepository,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { Tag } from './tag.entity';
@@ -21,9 +26,16 @@ export class TagRepository extends Repository<Tag> {
   public async updateTag(
     id: string,
     updateTagDto: UpdateTagDto,
+    user: User,
   ): Promise<void> {
+    // checking user is admin or NOT
+    // if(user.role !== 'admin') return permission Error
     const { name } = updateTagDto;
-    await this.update({ id }, { name });
+    const result: UpdateResult = await this.update({ id }, { name });
+
+    if (result.affected) {
+      throw new NotFoundException(`tag with '${id} is not found.`);
+    }
   }
 
   public async deleteTag(id: string, user: User): Promise<void> {
