@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
-import { User } from 'src/auth/user.entity';
-import { Comment } from 'src/comment/comment.entity';
-import { Tag } from 'src/tag/tag.entity';
+import { User } from '../auth/user.entity';
+import { Comment } from '../comment/comment.entity';
+import { Tag } from '../tag/tag.entity';
 import {
   Column,
   Entity,

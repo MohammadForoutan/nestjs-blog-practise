@@ -8,7 +8,6 @@ import { CommentModule } from './comment/comment.module';
 import { TagModule } from './tag/tag.module';
 import { AdvertiseModule } from './advertise/advertise.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { async, config } from 'rxjs';
 
 @Module({
   imports: [

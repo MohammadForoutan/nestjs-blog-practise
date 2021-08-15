@@ -9,9 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
-import { CreatePostDto } from 'src/posts/dto/create-post.dto';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
+import { CreatePostDto } from '../posts/dto/create-post.dto';
 import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
 import { UpdateCommentDto } from './dto/update-comment.dto';

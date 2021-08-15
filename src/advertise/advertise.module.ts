@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { AdvertiseController } from './advertise.controller';
 import { AdvertiseRepository } from './advertise.repository';
 import { AdvertiseService } from './advertise.service';
