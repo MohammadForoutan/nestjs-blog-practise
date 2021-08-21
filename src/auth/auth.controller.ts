@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredintialsDto } from './dto/auth-credintials.dto';
 
@@ -14,10 +14,8 @@ export class AuthController {
   @Post('/signin')
   public signIp(
     @Body() authCredintialsDto: AuthCredintialsDto,
-    @Req() req,
   ): Promise<{ accessToken: string }> {
-    const token = req.headers.authentication;
-    return this.authService.signIn(authCredintialsDto, token);
+    return this.authService.signIn(authCredintialsDto);
   }
 
   @Post('/logout')

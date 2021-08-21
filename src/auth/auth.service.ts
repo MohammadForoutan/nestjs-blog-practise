@@ -27,46 +27,23 @@ export class AuthService {
 
   public async signIn(
     authCredintialsDto: AuthCredintialsDto,
-    token,
   ): Promise<{ accessToken: string }> {
-    try {
-      let isUserLogin;
-      if (token) {
-        console.log('///////########');
+    const { username, password } = authCredintialsDto;
+    const user = await this.userRepository.findOne({ username });
 
-        isUserLogin = await this.tokenRepository.findOne({
-          tokenValue: token,
-        });
-      }
+    if (!user) {
+      throw new UnauthorizedException('Please check your login credintials.');
+    }
 
-      // if user already logged in
-      if (isUserLogin) {
-        throw new BadRequestException(`user already logged in`);
-      }
-      const { username, password } = authCredintialsDto;
-      const user = await this.userRepository.findOne({ username });
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-      if (!user) {
-        throw new UnauthorizedException('Please check your login credintials.');
-      }
+    if (isPasswordCorrect) {
+      const payload: JwtPayload = { username };
+      const accessToken = await this.jwtService.sign(payload);
 
-      const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-      if (isPasswordCorrect) {
-        const payload: JwtPayload = { username };
-        const accessToken = await this.jwtService.sign(payload);
-
-        // add token to tokens
-        const newToken = this.tokenRepository.create({ tokenValue: token });
-        await this.tokenRepository.save(newToken);
-
-        // return response
-        return { accessToken };
-      } else {
-        throw new UnauthorizedException('Please check your login credintials.');
-      }
-    } catch (err) {
-      console.log({ err });
+      return { accessToken };
+    } else {
+      throw new UnauthorizedException('Please check your login credintials.');
     }
   }
 }
