@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../auth/get-user.decorator';
-import { User } from '../auth/user.entity';
+import { GetUser } from '../user/get-user.decorator';
+import { User } from '../user/user.entity';
 import { Advertise } from './advertise.entity';
 import { AdvertiseService } from './advertise.service';
 import { CreateAdvertiseDto } from './dto/create-advertise.dto';

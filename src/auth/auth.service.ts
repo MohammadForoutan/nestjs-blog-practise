@@ -1,10 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredintialsDto } from './dto/auth-credintials.dto';
-import { UserRepository } from './users.repository';
+import { UserRepository } from '../user/users.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
+import { TokenRepository } from 'src/token/token.repository';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +17,8 @@ export class AuthService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
     private jwtService: JwtService,
+    @InjectRepository(TokenRepository)
+    private tokenRepository: TokenRepository,
   ) {}
 
   public signUp(authCredintialsDto: AuthCredintialsDto): Promise<void> {
@@ -20,22 +27,46 @@ export class AuthService {
 
   public async signIn(
     authCredintialsDto: AuthCredintialsDto,
+    token,
   ): Promise<{ accessToken: string }> {
-    const { username, password } = authCredintialsDto;
-    const user = await this.userRepository.findOne({ username });
+    try {
+      let isUserLogin;
+      if (token) {
+        console.log('///////########');
 
-    if (!user) {
-      throw new UnauthorizedException('Please check your login credintials.');
-    }
+        isUserLogin = await this.tokenRepository.findOne({
+          tokenValue: token,
+        });
+      }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      // if user already logged in
+      if (isUserLogin) {
+        throw new BadRequestException(`user already logged in`);
+      }
+      const { username, password } = authCredintialsDto;
+      const user = await this.userRepository.findOne({ username });
 
-    if (isPasswordCorrect) {
-      const payload: JwtPayload = { username };
-      const accessToken = await this.jwtService.sign(payload);
-      return { accessToken };
-    } else {
-      throw new UnauthorizedException('Please check your login credintials.');
+      if (!user) {
+        throw new UnauthorizedException('Please check your login credintials.');
+      }
+
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+      if (isPasswordCorrect) {
+        const payload: JwtPayload = { username };
+        const accessToken = await this.jwtService.sign(payload);
+
+        // add token to tokens
+        const newToken = this.tokenRepository.create({ tokenValue: token });
+        await this.tokenRepository.save(newToken);
+
+        // return response
+        return { accessToken };
+      } else {
+        throw new UnauthorizedException('Please check your login credintials.');
+      }
+    } catch (err) {
+      console.log({ err });
     }
   }
 }

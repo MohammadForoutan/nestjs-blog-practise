@@ -12,8 +12,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
 import { Post as PostEntity } from './posts.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../auth/get-user.decorator';
-import { User } from '../auth/user.entity';
+import { GetUser } from '../user/get-user.decorator';
+import { User } from '../user/user.entity';
 import { UpdatePublishStatusDto } from './dto/update-publish.dto';
 
 @Controller('posts')

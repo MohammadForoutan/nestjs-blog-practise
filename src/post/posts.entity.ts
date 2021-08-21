@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { User } from '../auth/user.entity';
+import { User } from '../user/user.entity';
 import { Comment } from '../comment/comment.entity';
 import { Tag } from '../tag/tag.entity';
 import {
@@ -26,6 +26,15 @@ export class Post {
 
   @Column()
   isPublish: boolean;
+
+  // @Column({ type: 'array', default: [] })
+  // likes: User[];
+
+  @Column({ default: 0 })
+  like_count: number;
+
+  // @Column({ type: 'cidr' }) // cidr - ip data in postgresql
+  // views: string[]; // implement this field later
 
   @ManyToOne(() => User, (user) => user.post)
   user: User;

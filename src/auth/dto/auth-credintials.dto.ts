@@ -5,7 +5,7 @@ export class AuthCredintialsDto {
   @IsString()
   @MinLength(3)
   @MaxLength(64)
-  username?: string;
+  username: string;
 
   @IsNotEmpty()
   @IsString()

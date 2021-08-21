@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../auth/user.entity';
-import { CreatePostDto } from '../posts/dto/create-post.dto';
-import { Post } from '../posts/posts.entity';
-import { PostsRepository } from '../posts/posts.repository';
+import { User } from '../user/user.entity';
+import { CreatePostDto } from '../post/dto/create-post.dto';
+import { Post } from '../post/posts.entity';
+import { PostsRepository } from '../post/posts.repository';
 import { Comment } from './comment.entity';
 import { CommentRepository } from './comment.repository';
 import { UpdateCommentDto } from './dto/update-comment.dto';

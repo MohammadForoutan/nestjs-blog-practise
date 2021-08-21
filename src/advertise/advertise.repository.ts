@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { User } from '../auth/user.entity';
+import { User } from '../user/user.entity';
 import {
   DeleteResult,
   EntityRepository,

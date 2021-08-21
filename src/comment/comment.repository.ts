@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
-import { User } from '../auth/user.entity';
-import { Post } from '../posts/posts.entity';
+import { User } from '../user/user.entity';
+import { Post } from '../post/posts.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { Comment } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
