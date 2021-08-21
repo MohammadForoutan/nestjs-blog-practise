@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
 import { TokenRepository } from 'src/token/token.repository';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -28,22 +29,42 @@ export class AuthService {
   public async signIn(
     authCredintialsDto: AuthCredintialsDto,
   ): Promise<{ accessToken: string }> {
+    // find user
     const { username, password } = authCredintialsDto;
     const user = await this.userRepository.findOne({ username });
 
+    // if user not exist
     if (!user) {
       throw new UnauthorizedException('Please check your login credintials.');
     }
 
+    // check password
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
     if (isPasswordCorrect) {
+      // create token
       const payload: JwtPayload = { username };
       const accessToken = await this.jwtService.sign(payload);
 
+      // insert token
+      const newToken = this.tokenRepository.create({ tokenValue: accessToken });
+      await this.tokenRepository.save(newToken);
+
       return { accessToken };
+      // throw error if credintials is not correct
     } else {
       throw new UnauthorizedException('Please check your login credintials.');
     }
+  }
+
+  public async logout(token: string): Promise<string> {
+    const result: DeleteResult = await this.tokenRepository.delete({
+      tokenValue: token,
+    });
+
+    if (result.affected < 1) {
+      throw new BadRequestException(`this user had not logged in`);
+    }
+
+    return 'user log out successfully';
   }
 }
