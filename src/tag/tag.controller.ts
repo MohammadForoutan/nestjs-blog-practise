@@ -37,14 +37,13 @@ export class TagController {
   @Patch('/:id')
   public updateTag(
     @Param('id') id: string,
-    updateTagDto: UpdateTagDto,
-    @GetUser() user: User,
+    @Body() updateTagDto: UpdateTagDto,
   ): void {
-    this.tagService.updateTag(id, updateTagDto, user);
+    this.tagService.updateTag(id, updateTagDto);
   }
 
   @Delete('/:id')
-  public deleteTag(@Param('id') id: string, @GetUser() user: User): void {
-    this.tagService.deleteTag(id, user);
+  public deleteTag(@Param('id') id: string): Promise<string> {
+    return this.tagService.deleteTag(id);
   }
 }
