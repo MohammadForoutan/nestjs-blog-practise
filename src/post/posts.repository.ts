@@ -3,15 +3,27 @@ import { User } from '../user/user.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './posts.entity';
+import { Tag } from '../tag/tag.entity';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {
   public async createPost(
     createPostDto: CreatePostDto,
+    postTags: Tag[],
     user: User,
   ): Promise<Post> {
     const { title, body } = createPostDto;
-    const post: Post = this.create({ title, body, isPublish: false, user });
+
+    const post: Post = this.create({
+      title,
+      body,
+      isPublish: false,
+      user,
+      tags: postTags,
+    });
+
+    console.log({ postTags });
+
     return await this.save(post);
   }
 

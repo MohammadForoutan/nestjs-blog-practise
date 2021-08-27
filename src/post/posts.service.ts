@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Tag } from '../tag/tag.entity';
+import { TagRepository } from '../tag/tag.repository';
 import { User } from '../user/user.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePublishStatusDto } from './dto/update-publish.dto';
@@ -11,10 +13,32 @@ import { PUBLISH_STATUS } from './publish-status.enum';
 export class PostsService {
   constructor(
     @InjectRepository(PostsRepository) private postsRepository: PostsRepository,
+    @InjectRepository(TagRepository) private tagRepository: TagRepository,
   ) {}
 
-  public createPost(createPostDto: CreatePostDto, user: User): Promise<Post> {
-    return this.postsRepository.createPost(createPostDto, user);
+  public async createPost(
+    createPostDto: CreatePostDto,
+    user: User,
+  ): Promise<Post> {
+    const { tags } = createPostDto;
+
+    const postTags: Tag[] = [];
+    // CREATE TAGS IF NOT EXIST
+
+    return Promise.all([
+      ...tags.map(async (tag) => {
+        const isTagExist = await this.tagRepository.findOne({ name: tag });
+        if (!isTagExist) {
+          const newTag = this.tagRepository.create({ name: tag });
+          await this.tagRepository.save(newTag);
+          return newTag;
+        } else {
+          return isTagExist;
+        }
+      }),
+    ]).then((tags) => {
+      return this.postsRepository.createPost(createPostDto, tags, user);
+    });
   }
 
   public getAllPosts(): Promise<Post[]> {

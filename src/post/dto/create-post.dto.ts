@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsArray, IsNotEmpty } from 'class-validator';
 
 export class CreatePostDto {
   @IsNotEmpty()
@@ -6,4 +6,7 @@ export class CreatePostDto {
 
   @IsNotEmpty()
   body: string;
+
+  @IsArray()
+  tags: string[];
 }

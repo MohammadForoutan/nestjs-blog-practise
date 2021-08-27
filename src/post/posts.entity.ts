@@ -33,16 +33,16 @@ export class Post {
   @Column({ default: 0 })
   like_count: number;
 
-  // @Column({ type: 'cidr' }) // cidr - ip data in postgresql
-  // views: string[]; // implement this field later
+  // @Column({ type: 'cidr' })
+  // views: string[];
 
-  @ManyToOne(() => User, (user) => user.post)
+  @ManyToOne(() => User, (user) => user.post, { eager: false })
   user: User;
 
   @OneToMany(() => Comment, (comment: Comment) => comment.post)
   comments: Comment[];
 
-  @ManyToMany(() => Tag)
+  @ManyToMany(() => Tag, { eager: false })
   @JoinTable()
   tags: Tag[];
 
