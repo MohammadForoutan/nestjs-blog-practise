@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tag } from '../tag/tag.entity';
+import { Tag } from 'src/tag/tag.entity';
 import { TagRepository } from '../tag/tag.repository';
 import { User } from '../user/user.entity';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -22,14 +22,11 @@ export class PostsService {
   ): Promise<Post> {
     const { tags } = createPostDto;
 
-    const postTags: Tag[] = [];
-    // CREATE TAGS IF NOT EXIST
-
     return Promise.all([
       ...tags.map(async (tag) => {
-        const isTagExist = await this.tagRepository.findOne({ name: tag });
+        const isTagExist: Tag = await this.tagRepository.findOne({ name: tag });
         if (!isTagExist) {
-          const newTag = this.tagRepository.create({ name: tag });
+          const newTag: Tag = this.tagRepository.create({ name: tag });
           await this.tagRepository.save(newTag);
           return newTag;
         } else {
@@ -68,5 +65,9 @@ export class PostsService {
     }
 
     await this.postsRepository.save(post);
+  }
+
+  public async toggleLike(id: string, user: User) {
+    return this.postsRepository.toggleLike(id, user);
   }
 }

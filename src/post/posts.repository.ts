@@ -48,4 +48,26 @@ export class PostsRepository extends Repository<Post> {
       throw new NotFoundException(`Post with ${id} was not found.`);
     }
   }
+
+  public async toggleLike(id: string, user: User): Promise<any> {
+    const post: Post = await this.findOne(id, { relations: ['likes'] });
+    const isLiked = post.likes.find((like) => like.id === user.id);
+
+    console.log({ isLiked });
+
+    // if liked
+    if (isLiked) {
+      // delete user id
+      post.likes = post.likes.filter((like) => like.id !== user.id);
+      post.like_count = post.like_count - 1;
+    } else {
+      // if not like add user id
+      post.likes.unshift(user);
+      post.like_count = post.like_count + 1;
+    }
+
+    console.log({ post });
+
+    await this.save(post);
+  }
 }

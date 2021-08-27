@@ -61,4 +61,11 @@ export class PostsController {
   ): Promise<void> {
     return this.postService.updatePublishStatus(id, publishUpdateDto, user);
   }
+
+  // UPDATE /PATCH
+  @Patch('/:id/like')
+  @UseGuards(AuthGuard())
+  public toggleLike(@Param('id') id: string, @GetUser() user: User): any {
+    return this.postService.toggleLike(id, user);
+  }
 }
