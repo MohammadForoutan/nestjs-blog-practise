@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Ip,
   Param,
   Patch,
   Post,
@@ -40,8 +41,9 @@ export class PostsController {
   public getPostById(
     @Param('id') id: string,
     @GetUser() user: User,
+    @Ip() ip: string,
   ): Promise<PostEntity> {
-    return this.postService.getPostById(id, user);
+    return this.postService.getPostById(id, user, ip);
   }
 
   // DELETE

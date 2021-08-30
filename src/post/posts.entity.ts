@@ -1,4 +1,3 @@
-import { IsNotEmpty } from 'class-validator';
 import { User } from '../user/user.entity';
 import { Comment } from '../comment/comment.entity';
 import { Tag } from '../tag/tag.entity';
@@ -11,20 +10,20 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { View } from 'src/view/view.entity';
 
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  @IsNotEmpty()
+  @Column({ nullable: false })
   title: string;
 
-  @Column()
+  @Column({ nullable: false })
   body: string;
 
-  @Column()
+  @Column({ default: null })
   isPublish: boolean;
 
   // @Column({ type: 'array', default: [] })
@@ -33,8 +32,8 @@ export class Post {
   @Column({ default: 0 })
   like_count: number;
 
-  // @Column({ type: 'cidr' })
-  // views: string[];
+  @Column({ default: 0 })
+  view_count: number;
 
   @ManyToOne(() => User, (user) => user.post, { eager: false })
   user: User;
@@ -49,6 +48,9 @@ export class Post {
   @ManyToMany(() => User)
   @JoinTable()
   likes: User[];
+
+  @OneToMany(() => View, (view: View) => view.post)
+  views: View[];
 
   /*
     like_count & like & views column should be added.

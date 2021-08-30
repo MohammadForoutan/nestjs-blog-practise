@@ -31,15 +31,16 @@ export class PostsRepository extends Repository<Post> {
     return await this.find();
   }
 
-  public async getPostById(id: string, user: User): Promise<Post> {
-    const post: Post = await this.findOne({ id });
-
-    // if not found or don't show hidden post for others(not owner)
-    if (!post || (post.user !== user && !post.isPublish)) {
-      throw new NotFoundException(`post with ${id} not found.`);
-    }
-
-    return post;
+  public getPostById(id: string, user: User): Promise<Post> {
+    let post: Post;
+    return this.findOne(id).then((foundPost) => {
+      post = foundPost;
+      // if not found or don't show hidden post for others(not owner)
+      if (!post || (post.user !== user && !post.isPublish)) {
+        throw new NotFoundException(`post with ${id} not found.`);
+      }
+      return post;
+    });
   }
 
   public async deletePost(id: string, user: User): Promise<void> {
@@ -69,5 +70,23 @@ export class PostsRepository extends Repository<Post> {
     console.log({ post });
 
     await this.save(post);
+  }
+
+  public async addView(post: Promise<Post>, ip: string): Promise<any> {
+    return post.then((result) => {
+      this.findOne(result.id, { relations: ['views'] }).then(
+        async (foundPost) => {
+          const isViewBefore = foundPost.views.some((view) => view.ip === ip);
+          console.log(isViewBefore);
+
+          if (!isViewBefore) {
+            await this.update(
+              { id: foundPost.id },
+              { view_count: foundPost.view_count++ },
+            );
+          }
+        },
+      );
+    });
   }
 }

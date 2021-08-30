@@ -8,6 +8,8 @@ import { CommentModule } from './comment/comment.module';
 import { TagModule } from './tag/tag.module';
 import { AdvertiseModule } from './advertise/advertise.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from './user/user.module';
+import { ViewModule } from './view/view.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     CommentModule,
     TagModule,
     AdvertiseModule,
+    UserModule,
+    ViewModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -1,6 +1,7 @@
 import { Comment } from '../comment/comment.entity';
 import { Post } from '../post/posts.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { View } from 'src/view/view.entity';
 
 @Entity()
 export class User {
@@ -20,5 +21,8 @@ export class User {
   post: Post[];
 
   @OneToMany(() => Comment, (comment: Comment) => comment.user)
-  comment: Comment[];
+  comments: Comment[];
+
+  @OneToMany(() => View, (view: View) => view.user)
+  views: View[];
 }
