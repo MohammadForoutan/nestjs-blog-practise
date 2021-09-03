@@ -12,39 +12,32 @@ import { UpdateAdvertiseDto } from './dto/update-advertise.dto';
 
 @EntityRepository(Advertise)
 export class AdvertiseRepository extends Repository<Advertise> {
-  // create
   public async createAdvertise(
     createAdvertiseDto: CreateAdvertiseDto,
     user: User,
   ): Promise<Advertise> {
-    //   check user is admin or not
-    // if(user.role !== admin) return
     const { name, description } = createAdvertiseDto;
-    const advertise: Advertise = this.create({ name, description });
+    const advertise: Advertise = this.create({ name, description, user });
     return await this.save(advertise);
   }
   // update
   public async updateAdvertise(
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto,
-    user: User,
   ): Promise<void> {
-    //   check user is admin or not
-    // if(user.role !== admin) return
-    const { name, description } = updateAdvertiseDto;
+    const { name, description, media } = updateAdvertiseDto;
     const result: UpdateResult = await this.update(
       { id },
-      { name, description },
+      { name, description, media },
     );
 
     if (result.affected) {
       throw new NotFoundException(`advertise with '${id} is not found.`);
     }
   }
-  // get
+
   public async getAdvtise(id: string): Promise<Advertise> {
     const advertise: Advertise = await this.findOne({ id });
-
     if (!advertise) {
       throw new NotFoundException(`advertise with '${id} is not found.`);
     }
@@ -56,8 +49,7 @@ export class AdvertiseRepository extends Repository<Advertise> {
     return await this.find();
   }
   // delete
-  public async deleteAdvertise(id: string, user: User): Promise<void> {
-    // check user is admin or not
+  public async deleteAdvertise(id: string): Promise<void> {
     const result: DeleteResult = await this.delete({ id });
 
     if (result.affected) {

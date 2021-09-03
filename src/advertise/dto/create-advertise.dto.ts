@@ -4,4 +4,5 @@ export class CreateAdvertiseDto {
   @IsNotEmpty()
   name: string;
   description: string;
+  media: string;
 }

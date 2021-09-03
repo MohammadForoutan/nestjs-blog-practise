@@ -28,15 +28,14 @@ export class AdvertiseService {
     return this.advertiseRepository.getAdvtise(id);
   }
 
-  public deleteAdvertise(id: string, user: User): void {
-    this.advertiseRepository.deleteAdvertise(id, user);
+  public deleteAdvertise(id: string): void {
+    this.advertiseRepository.deleteAdvertise(id);
   }
 
   public updateAdvertise(
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto,
-    user: User,
   ): void {
-    this.advertiseRepository.updateAdvertise(id, updateAdvertiseDto, user);
+    this.advertiseRepository.updateAdvertise(id, updateAdvertiseDto);
   }
 }

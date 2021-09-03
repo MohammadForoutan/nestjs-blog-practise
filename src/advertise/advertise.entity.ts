@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Advertise {
@@ -13,4 +14,8 @@ export class Advertise {
 
   @Column()
   media: string;
+
+  // who make ads
+  @ManyToOne(() => User, (user: User) => user.advertises)
+  user: User;
 }

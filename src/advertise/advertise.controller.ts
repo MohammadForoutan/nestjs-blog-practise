@@ -41,8 +41,8 @@ export class AdvertiseController {
 
   @Delete('/:id')
   @UseGuards(AuthGuard())
-  public deleteAdvertise(@Param('id') id: string, @GetUser() user: User): void {
-    this.advertiseService.deleteAdvertise(id, user);
+  public deleteAdvertise(@Param('id') id: string): void {
+    this.advertiseService.deleteAdvertise(id);
   }
 
   @Put('/:id')
@@ -50,8 +50,7 @@ export class AdvertiseController {
   public updateAdvertise(
     @Param('id') id: string,
     @Body() updateAdvertiseDto: UpdateAdvertiseDto,
-    @GetUser() user: User,
   ): void {
-    this.advertiseService.updateAdvertise(id, updateAdvertiseDto, user);
+    this.advertiseService.updateAdvertise(id, updateAdvertiseDto);
   }
 }
