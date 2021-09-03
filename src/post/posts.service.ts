@@ -9,7 +9,6 @@ import { UpdatePublishStatusDto } from './dto/update-publish.dto';
 import { Post } from './posts.entity';
 import { PostsRepository } from './posts.repository';
 import { PUBLISH_STATUS } from './publish-status.enum';
-import { async } from 'rxjs';
 
 @Injectable()
 export class PostsService {
@@ -45,22 +44,21 @@ export class PostsService {
     return this.postsRepository.getAllPosts();
   }
 
-  public getPostById(id: string, user: User, ip: string) {
-    const post = this.postsRepository.getPostById(id, user);
+  public async getPostById(id: string, user: User, ip: string): Promise<Post> {
+    const post = await this.postsRepository.getPostById(id, user);
 
-    // add post and return post
-    return post.then((foundPost) => {
-      this.viewRepository.isUserViewPost(ip, foundPost).then((isView) => {
-        if (!isView) {
-          // add view to view table
-          return this.viewRepository.addView(foundPost, user, ip).then(() => {
-            return this.postsRepository.addView(post, ip).then(() => {
-              return foundPost;
-            });
-          });
-        }
+    const isView = await this.viewRepository.isUserViewPost(ip, post);
+
+    if (!isView) {
+      // add view in view table
+      await this.viewRepository.addView(post, user, ip);
+      // add view in post columns
+      await this.postsRepository.addView(post).then((result) => {
+        return result;
       });
-    });
+    } else {
+      return post;
+    }
   }
 
   public deletePost(id: string, user: User): void {

@@ -72,21 +72,8 @@ export class PostsRepository extends Repository<Post> {
     await this.save(post);
   }
 
-  public async addView(post: Promise<Post>, ip: string): Promise<any> {
-    return post.then((result) => {
-      this.findOne(result.id, { relations: ['views'] }).then(
-        async (foundPost) => {
-          const isViewBefore = foundPost.views.some((view) => view.ip === ip);
-          console.log(isViewBefore);
-
-          if (!isViewBefore) {
-            await this.update(
-              { id: foundPost.id },
-              { view_count: foundPost.view_count++ },
-            );
-          }
-        },
-      );
-    });
+  public async addView(post: Post): Promise<void> {
+    post.view_count++;
+    await this.save(post);
   }
 }
