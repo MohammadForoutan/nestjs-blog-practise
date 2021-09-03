@@ -28,14 +28,14 @@ export class AdvertiseService {
     return this.advertiseRepository.getAdvtise(id);
   }
 
-  public deleteAdvertise(id: string): void {
-    this.advertiseRepository.deleteAdvertise(id);
+  public deleteAdvertise(id: string): Promise<{ message: string }> {
+    return this.advertiseRepository.deleteAdvertise(id);
   }
 
   public updateAdvertise(
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto,
-  ): void {
-    this.advertiseRepository.updateAdvertise(id, updateAdvertiseDto);
+  ): Promise<Advertise> {
+    return this.advertiseRepository.updateAdvertise(id, updateAdvertiseDto);
   }
 }

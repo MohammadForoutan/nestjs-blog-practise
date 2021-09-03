@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   UseGuards,
@@ -35,22 +36,26 @@ export class AdvertiseController {
   }
 
   @Get('/:id')
-  public getAdvertise(@Param('id') id: string): Promise<Advertise> {
+  public getAdvertise(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Advertise> {
     return this.advertiseService.getAdvertise(id);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard())
-  public deleteAdvertise(@Param('id') id: string): void {
-    this.advertiseService.deleteAdvertise(id);
+  public deleteAdvertise(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<{ message: string }> {
+    return this.advertiseService.deleteAdvertise(id);
   }
 
   @Put('/:id')
   @UseGuards(AuthGuard())
   public updateAdvertise(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAdvertiseDto: UpdateAdvertiseDto,
-  ): void {
-    this.advertiseService.updateAdvertise(id, updateAdvertiseDto);
+  ): Promise<Advertise> {
+    return this.advertiseService.updateAdvertise(id, updateAdvertiseDto);
   }
 }
