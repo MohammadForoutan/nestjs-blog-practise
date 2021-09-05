@@ -16,12 +16,12 @@ export class View {
   @Column({ type: 'cidr' })
   ip: string;
 
-  @ManyToOne(() => User, (user: User) => user.views)
-  user: User;
-
-  @ManyToOne(() => Post, (post: Post) => post.views)
-  post: Post;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => User, (user: User) => user.views, { onDelete: 'SET NULL' })
+  user: User;
+
+  @ManyToOne(() => Post, (post: Post) => post.views, { onDelete: 'CASCADE' })
+  post: Post;
 }

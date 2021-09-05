@@ -1,7 +1,12 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import { Post } from '../post/posts.entity';
-import { DeleteResult, EntityRepository, Repository } from 'typeorm';
+import {
+  DeleteResult,
+  EntityRepository,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { Comment } from './comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -21,7 +26,12 @@ export class CommentRepository extends Repository<Comment> {
   }
 
   public async deleteComment(id: string, user: User): Promise<void> {
-    const result: DeleteResult = await this.delete({ id, user });
+    let result: DeleteResult;
+    if (user.canAccessDashboard) {
+      result = await this.delete({ id });
+    } else {
+      result = await this.delete({ id, user });
+    }
 
     if (result.affected) {
       throw new NotFoundException(`comment with ${id} not found.`);
@@ -33,7 +43,16 @@ export class CommentRepository extends Repository<Comment> {
     id: string,
   ): Promise<void> {
     const { body } = updateCommentDto;
-    this.update({ id, user }, { body });
+    let result: UpdateResult;
+    if (user.canAccessDashboard) {
+      result = await this.update({ id }, { body });
+    } else {
+      result = await this.update({ id, user }, { body });
+    }
+
+    if (result.affected < 1) {
+      throw new BadRequestException(`comment with this '${id}' id not found`);
+    }
   }
 
   public async getPostComments(post: Post): Promise<Comment[]> {

@@ -16,6 +16,8 @@ export class Comment {
   @ManyToOne(() => Post, (post: Post) => post.comments, { eager: false })
   post: Post;
 
-  @ManyToOne(() => User, (user: User) => user.comments, { eager: false })
+  @ManyToOne(() => User, (user: User) => user.comments, {
+    onDelete: 'SET NULL',
+  })
   user: User;
 }

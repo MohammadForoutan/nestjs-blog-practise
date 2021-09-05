@@ -5,6 +5,7 @@ import {
   Get,
   Ip,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   UseGuards,
@@ -39,7 +40,7 @@ export class PostsController {
 
   @Get('/:id')
   public getPostById(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
     @Ip() ip: string,
   ): Promise<PostEntity> {
@@ -49,7 +50,10 @@ export class PostsController {
   // DELETE
   @Delete('/:id')
   @UseGuards(AuthGuard())
-  public deletePost(@Param('id') id: string, @GetUser() user: User): void {
+  public deletePost(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser() user: User,
+  ): void {
     return this.postService.deletePost(id, user);
   }
 
@@ -57,7 +61,7 @@ export class PostsController {
   @Patch('/:id/publish-status')
   @UseGuards(AuthGuard())
   public updatePublishStatus(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() publishUpdateDto: UpdatePublishStatusDto,
     @GetUser() user: User,
   ): Promise<void> {
@@ -67,7 +71,10 @@ export class PostsController {
   // UPDATE /PATCH
   @Patch('/:id/like')
   @UseGuards(AuthGuard())
-  public toggleLike(@Param('id') id: string, @GetUser() user: User): any {
+  public toggleLike(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser() user: User,
+  ): any {
     return this.postService.toggleLike(id, user);
   }
 }

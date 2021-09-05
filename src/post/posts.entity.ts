@@ -41,7 +41,7 @@ export class Post {
   @OneToMany(() => Comment, (comment: Comment) => comment.post)
   comments: Comment[];
 
-  @ManyToMany(() => Tag, { eager: false })
+  @ManyToMany(() => Tag, { cascade: true })
   @JoinTable()
   tags: Tag[];
 
@@ -49,7 +49,7 @@ export class Post {
   @JoinTable()
   likes: User[];
 
-  @OneToMany(() => View, (view: View) => view.post)
+  @OneToMany(() => View, (view: View) => view.post, { onDelete: 'CASCADE' })
   views: View[];
 
   /*
