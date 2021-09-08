@@ -24,8 +24,8 @@ export class PostsService {
   ): Promise<Post> {
     const { tags } = createPostDto;
 
-    return Promise.all([
-      ...tags.map(async (tag) => {
+    return Promise.all(
+      tags.map(async (tag) => {
         const isTagExist: Tag = await this.tagRepository.findOne({ name: tag });
         if (!isTagExist) {
           const newTag: Tag = this.tagRepository.create({ name: tag });
@@ -35,7 +35,7 @@ export class PostsService {
           return isTagExist;
         }
       }),
-    ]).then((tags) => {
+    ).then((tags) => {
       return this.postsRepository.createPost(createPostDto, tags, user);
     });
   }
@@ -49,15 +49,15 @@ export class PostsService {
 
     const isView = await this.viewRepository.isUserViewPost(ip, post);
 
-    if (!isView) {
+    if (isView) {
+      return post;
+    } else {
       // add view in view table
       await this.viewRepository.addView(post, user, ip);
       // add view in post columns
       await this.postsRepository.addView(post).then((result) => {
         return result;
       });
-    } else {
-      return post;
     }
   }
 

@@ -17,6 +17,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
 import { UpdatePublishStatusDto } from './dto/update-publish.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -24,7 +26,7 @@ export class PostsController {
 
   // POST
   @Post()
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   public createPost(
     @Body() createPostDto: CreatePostDto,
     @GetUser() user: User,
@@ -49,7 +51,7 @@ export class PostsController {
 
   // DELETE
   @Delete('/:id')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   public deletePost(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
@@ -59,7 +61,7 @@ export class PostsController {
 
   // UPDATE / PATCH
   @Patch('/:id/publish-status')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard, RolesGuard)
   public updatePublishStatus(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() publishUpdateDto: UpdatePublishStatusDto,
@@ -70,7 +72,7 @@ export class PostsController {
 
   // UPDATE /PATCH
   @Patch('/:id/like')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   public toggleLike(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,

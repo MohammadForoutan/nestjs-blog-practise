@@ -1,5 +1,5 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { User } from '../user/user.entity';
+import { User, UserRole } from '../user/user.entity';
 import { Post } from '../post/posts.entity';
 import {
   DeleteResult,
@@ -27,13 +27,13 @@ export class CommentRepository extends Repository<Comment> {
 
   public async deleteComment(id: string, user: User): Promise<void> {
     let result: DeleteResult;
-    // if (user.canAccessDashboard) {
-    //   result = await this.delete({ id });
-    // } else {
-    //   result = await this.delete({ id, user });
-    // }
+    if (user.role === UserRole.ADMIN) {
+      result = await this.delete({ id });
+    } else {
+      result = await this.delete({ id, user });
+    }
 
-    if (result.affected) {
+    if (result.affected < 1) {
       throw new NotFoundException(`comment with ${id} not found.`);
     }
   }
@@ -44,11 +44,11 @@ export class CommentRepository extends Repository<Comment> {
   ): Promise<void> {
     const { body } = updateCommentDto;
     let result: UpdateResult;
-    // if (user.canAccessDashboard) {
-    //   result = await this.update({ id }, { body });
-    // } else {
-    //   result = await this.update({ id, user }, { body });
-    // }
+    if (user.role === UserRole.ADMIN) {
+      result = await this.update({ id }, { body });
+    } else {
+      result = await this.update({ id, user }, { body });
+    }
 
     if (result.affected < 1) {
       throw new BadRequestException(`comment with this '${id}' id not found`);

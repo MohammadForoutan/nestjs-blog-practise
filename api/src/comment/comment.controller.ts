@@ -16,13 +16,15 @@ import { CreatePostDto } from '../post/dto/create-post.dto';
 import { Comment } from './comment.entity';
 import { CommentService } from './comment.service';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('comment')
 export class CommentController {
   constructor(private commentService: CommentService) {}
 
   @Post('/post/:postId')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   public createComment(
     @Body() createPostDto: CreatePostDto,
     @Param('postId') postId: string,
@@ -40,7 +42,7 @@ export class CommentController {
   }
 
   @Delete('/:id')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard)
   public deletePost(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
@@ -49,7 +51,7 @@ export class CommentController {
   }
 
   @Patch('/:id')
-  @UseGuards(AuthGuard())
+  @UseGuards(JwtAuthGuard, RolesGuard)
   public updateComment(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCommentDto: UpdateCommentDto,
