@@ -15,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private userRepository: UserRepository,
   ) {
     super({
+      ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_SECRET'),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
@@ -27,6 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Please check your login credintials.');
     }
 
-    return user;
+    const { password, ...result } = user;
+    return result;
   }
 }

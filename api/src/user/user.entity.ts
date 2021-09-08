@@ -4,6 +4,12 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { View } from 'src/view/view.entity';
 import { Advertise } from 'src/advertise/advertise.entity';
 
+export enum UserRole {
+  ADMIN = 'admin',
+  EDITOR = 'editor',
+  USER = 'user',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -15,8 +21,8 @@ export class User {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ nullable: false, default: false })
-  canAccessDashboard: boolean;
+  @Column({ nullable: false, enum: UserRole, default: UserRole.USER })
+  role: UserRole;
 
   @OneToMany(() => Post, (post: Post) => post.user)
   post: Post[];

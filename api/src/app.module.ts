@@ -14,6 +14,7 @@ import { ViewModule } from './view/view.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: [`.env.stage.${process.env.STAGE}`],
       // validationSchema: configValidaton // Later will be added
     }),

@@ -9,7 +9,9 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { hasRoles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 import { GetUser } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
 import { Advertise } from './advertise.entity';
@@ -22,7 +24,8 @@ export class AdvertiseController {
   constructor(private advertiseService: AdvertiseService) {}
 
   @Post()
-  @UseGuards(AuthGuard())
+  @hasRoles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   public createAdvertise(
     @Body() createAdvertiseDto: CreateAdvertiseDto,
     @GetUser() user: User,
@@ -43,7 +46,8 @@ export class AdvertiseController {
   }
 
   @Delete('/:id')
-  @UseGuards(AuthGuard())
+  @hasRoles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   public deleteAdvertise(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<{ message: string }> {
@@ -51,7 +55,8 @@ export class AdvertiseController {
   }
 
   @Put('/:id')
-  @UseGuards(AuthGuard())
+  @hasRoles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   public updateAdvertise(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAdvertiseDto: UpdateAdvertiseDto,

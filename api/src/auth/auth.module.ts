@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,9 +8,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TokenRepository } from '../token/token.repository';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { RolesGuard } from './roles.guard';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
+    forwardRef(() => UserModule),
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
@@ -27,7 +31,7 @@ import { TokenRepository } from '../token/token.repository';
     }),
     TypeOrmModule.forFeature([UserRepository, TokenRepository]),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtAuthGuard, RolesGuard, JwtStrategy],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule],
 })

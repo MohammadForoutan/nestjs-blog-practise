@@ -15,7 +15,7 @@ export class Advertise {
   @Column()
   media: string;
 
-  // who make ads
+  // who made ads
   @ManyToOne(() => User, (user: User) => user.advertises)
   user: User;
 }
