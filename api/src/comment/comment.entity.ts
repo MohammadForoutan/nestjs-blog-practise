@@ -1,6 +1,7 @@
 import { User } from '../user/user.entity';
 import { Post } from '../post/posts.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CommentStatus } from './comment-status.enum';
 
 @Entity()
 export class Comment {
@@ -10,8 +11,8 @@ export class Comment {
   @Column({ type: 'text' })
   body: string;
 
-  @Column({ default: null, type: 'boolean' })
-  status: boolean;
+  @Column({ type: 'enum', default: CommentStatus.NOT_SET, enum: CommentStatus })
+  status: CommentStatus;
 
   @ManyToOne(() => Post, (post: Post) => post.comments, { eager: false })
   post: Post;

@@ -21,11 +21,11 @@ export class CommentService {
     postId: string,
   ): Promise<Comment> {
     const post: Post = await this.postRepository.getPostById(postId, user);
-    return this.commentRepository.createComment(createPostDto, user, post);
+    return this.commentRepository.createOne(createPostDto, user, post);
   }
 
   public deleteComment(id: string, user: User): void {
-    this.commentRepository.deleteComment(id, user);
+    this.commentRepository.deleteOne(id, user);
   }
 
   public updateComment(
@@ -33,11 +33,11 @@ export class CommentService {
     id: string,
     user: User,
   ): void {
-    this.commentRepository.updateComment(updateCommentDto, user, id);
+    this.commentRepository.updateOne(updateCommentDto, user, id);
   }
 
   public async getPostComments(postId: string, user: User): Promise<Comment[]> {
     const post: Post = await this.postRepository.getPostById(postId, user);
-    return this.commentRepository.getPostComments(post);
+    return this.commentRepository.getPostComments(post, user);
   }
 }

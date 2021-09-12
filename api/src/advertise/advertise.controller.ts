@@ -12,6 +12,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { hasRoles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { DeleteResult } from 'typeorm';
 import { GetUser } from '../user/get-user.decorator';
 import { User } from '../user/user.entity';
 import { Advertise } from './advertise.entity';
@@ -50,7 +51,7 @@ export class AdvertiseController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   public deleteAdvertise(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<{ message: string }> {
+  ): Promise<DeleteResult> {
     return this.advertiseService.deleteAdvertise(id);
   }
 

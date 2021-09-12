@@ -28,6 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Please check your login credintials.');
     }
 
+    //eslint-disable-next-line
     const { password, ...result } = user;
     return result;
   }
