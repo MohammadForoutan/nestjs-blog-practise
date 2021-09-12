@@ -9,7 +9,7 @@ import { UserRepository } from '../user/users.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt-payload.interface';
-import { TokenRepository } from 'src/token/token.repository';
+import { TokenRepository } from './token.repository';
 import { DeleteResult } from 'typeorm';
 
 @Injectable()
