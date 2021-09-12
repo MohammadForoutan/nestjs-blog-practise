@@ -1,7 +1,7 @@
 import { Comment } from '../comment/comment.entity';
 import { Post } from '../post/posts.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { View } from 'src/view/view.entity';
+import { View } from '../post/view.entity';
 import { Advertise } from 'src/advertise/advertise.entity';
 
 export enum UserRole {

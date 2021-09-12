@@ -10,7 +10,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { View } from 'src/view/view.entity';
+import { View } from './view.entity';
 
 @Entity()
 export class Post {
