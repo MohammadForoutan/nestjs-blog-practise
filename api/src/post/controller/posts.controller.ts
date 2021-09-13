@@ -10,14 +10,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { PostsService } from './posts.service';
-import { Post as PostEntity } from './posts.entity';
-import { GetUser } from '../user/get-user.decorator';
-import { User } from '../user/user.entity';
-import { UpdatePublishStatusDto } from './dto/update-publish.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guard/roles.guard';
+import { User } from '../../user/models/user.entity';
+import { GetUser } from '../../user/service/get-user.decorator';
+import { CreatePostDto } from '../dto/create-post.dto';
+import { UpdatePublishStatusDto } from '../dto/update-publish.dto';
+import { Post as PostEntity } from '../models/posts.entity';
+import { PostsService } from '../service/posts.service';
 
 @Controller('posts')
 export class PostsController {

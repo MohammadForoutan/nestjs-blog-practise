@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { AuthCredintialsDto } from '../auth/dto/auth-credintials.dto';
-import { User } from './user.entity';
+import { AuthCredintialsDto } from '../../auth/dto/auth-credintials.dto';
+import { User } from '../models/user.entity';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common';
 
@@ -8,7 +8,7 @@ import { BadRequestException } from '@nestjs/common';
 export class UserRepository extends Repository<User> {
   public async createUser(
     authCredintialsDto: AuthCredintialsDto,
-  ): Promise<void> {
+  ): Promise<{ id: string; username: string; role: string }> {
     const { username, password } = authCredintialsDto;
 
     // if username already exist
@@ -27,5 +27,9 @@ export class UserRepository extends Repository<User> {
     const user = this.create({ username, password: hashedPassword });
 
     await this.save(user);
+
+    // eslint-disable-next-line
+    const { password: pass, ...result } = user;
+    return result;
   }
 }

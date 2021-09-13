@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdvertiseController } from './advertise.controller';
-import { AdvertiseRepository } from './advertise.repository';
-import { AdvertiseService } from './advertise.service';
+import { AdvertiseController } from './controller/advertise.controller';
+import { AdvertiseRepository } from './service/advertise.repository';
+import { AdvertiseService } from './service/advertise.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([AdvertiseRepository])],

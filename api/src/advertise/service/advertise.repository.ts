@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
-import { User } from '../user/user.entity';
+import { User } from '../../user/models/user.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import { Advertise } from './advertise.entity';
-import { CreateAdvertiseDto } from './dto/create-advertise.dto';
-import { UpdateAdvertiseDto } from './dto/update-advertise.dto';
+import { Advertise } from '../models/advertise.entity';
+import { CreateAdvertiseDto } from '../dto/create-advertise.dto';
+import { UpdateAdvertiseDto } from '../dto/update-advertise.dto';
 
 @EntityRepository(Advertise)
 export class AdvertiseRepository extends Repository<Advertise> {

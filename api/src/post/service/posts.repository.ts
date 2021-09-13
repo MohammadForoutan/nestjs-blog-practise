@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
-import { User } from '../user/user.entity';
+import { Tag } from '../../tag/models/tag.entity';
+import { User } from '../../user/models/user.entity';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import { CreatePostDto } from './dto/create-post.dto';
-import { Post } from './posts.entity';
-import { Tag } from '../tag/tag.entity';
+import { CreatePostDto } from '../dto/create-post.dto';
+import { Post } from '../models/posts.entity';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {

@@ -1,16 +1,16 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { User, UserRole } from '../user/user.entity';
-import { Post } from '../post/posts.entity';
+import { User, UserRole } from '../../user/models/user.entity';
+import { Post } from '../../post/models/posts.entity';
 import {
   DeleteResult,
   EntityRepository,
   Repository,
   UpdateResult,
 } from 'typeorm';
-import { Comment } from './comment.entity';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
-import { CommentStatus } from './comment-status.enum';
+import { Comment } from '../models/comment.entity';
+import { UpdateCommentDto } from '../dto/update-comment.dto';
+import { CreateCommentDto } from '../dto/create-comment.dto';
+import { CommentStatus } from '../models/comment-status.enum';
 
 @EntityRepository(Comment)
 export class CommentRepository extends Repository<Comment> {

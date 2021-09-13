@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tag } from '../tag/tag.entity';
 import { ViewRepotitory } from './view.repository';
-import { TagRepository } from '../tag/tag.repository';
-import { User } from '../user/user.entity';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePublishStatusDto } from './dto/update-publish.dto';
-import { Post } from './posts.entity';
 import { PostsRepository } from './posts.repository';
-import { PUBLISH_STATUS } from './publish-status.enum';
+import { TagRepository } from 'src/tag/service/tag.repository';
+import { CreatePostDto } from '../dto/create-post.dto';
+import { User } from 'src/user/models/user.entity';
+import { Post } from '../models/posts.entity';
+import { Tag } from 'src/tag/models/tag.entity';
+import { UpdatePublishStatusDto } from '../dto/update-publish.dto';
+import { PUBLISH_STATUS } from '../models/publish-status.enum';
 
 @Injectable()
 export class PostsService {

@@ -4,11 +4,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredintialsDto } from './dto/auth-credintials.dto';
-import { UserRepository } from '../user/users.repository';
+import { AuthCredintialsDto } from '../dto/auth-credintials.dto';
+import { UserRepository } from '../../user/service/users.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload.interface';
+import { JwtPayload } from '../models/jwt-payload.interface';
 import { TokenRepository } from './token.repository';
 import { DeleteResult } from 'typeorm';
 

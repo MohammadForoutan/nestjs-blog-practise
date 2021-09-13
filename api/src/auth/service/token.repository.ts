@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { DeleteResult, EntityRepository, Repository } from 'typeorm';
-import { Token } from './token.entity';
+import { Token } from '../models/token.entity';
 
 @EntityRepository(Token)
 export class TokenRepository extends Repository<Token> {

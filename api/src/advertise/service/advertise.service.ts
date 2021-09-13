@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
-import { User } from '../user/user.entity';
-import { Advertise } from './advertise.entity';
+import { User } from '../../user/models/user.entity';
+import { Advertise } from '../models/advertise.entity';
 import { AdvertiseRepository } from './advertise.repository';
-import { CreateAdvertiseDto } from './dto/create-advertise.dto';
-import { UpdateAdvertiseDto } from './dto/update-advertise.dto';
+import { CreateAdvertiseDto } from '../dto/create-advertise.dto';
+import { UpdateAdvertiseDto } from '../dto/update-advertise.dto';
 
 @Injectable()
 export class AdvertiseService {

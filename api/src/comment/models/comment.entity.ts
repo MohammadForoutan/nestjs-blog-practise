@@ -1,5 +1,5 @@
-import { User } from '../user/user.entity';
-import { Post } from '../post/posts.entity';
+import { Post } from '../../post/models/posts.entity';
+import { User } from '../../user/models/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CommentStatus } from './comment-status.enum';
 

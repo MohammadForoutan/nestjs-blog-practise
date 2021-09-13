@@ -1,4 +1,5 @@
-import { User } from '../user/user.entity';
+import { User } from '../../user/models/user.entity';
+import { Post } from '../../post/models/posts.entity';
 import {
   Column,
   CreateDateColumn,
@@ -6,7 +7,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Post } from '../post/posts.entity';
 
 @Entity()
 export class View {

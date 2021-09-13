@@ -1,7 +1,7 @@
-import { Post } from 'src/post/posts.entity';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/user/models/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { View } from './view.entity';
+import { Post } from '../models/posts.entity';
+import { View } from '../models/view.entity';
 
 @EntityRepository(View)
 export class ViewRepotitory extends Repository<View> {

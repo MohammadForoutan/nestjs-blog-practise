@@ -5,9 +5,9 @@ import {
   Repository,
   UpdateResult,
 } from 'typeorm';
-import { CreateTagDto } from './dto/create-tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
-import { Tag } from './tag.entity';
+import { CreateTagDto } from '../dto/create-tag.dto';
+import { UpdateTagDto } from '../dto/update-tag.dto';
+import { Tag } from '../models/tag.entity';
 
 @EntityRepository(Tag)
 export class TagRepository extends Repository<Tag> {

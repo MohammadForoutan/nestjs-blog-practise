@@ -9,16 +9,16 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { hasRoles } from 'src/auth/roles.decorator';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { hasRoles } from '../../auth/service/roles.decorator';
+import { RolesGuard } from '../../auth/guard/roles.guard';
 import { DeleteResult } from 'typeorm';
-import { GetUser } from '../user/get-user.decorator';
-import { User } from '../user/user.entity';
-import { Advertise } from './advertise.entity';
-import { AdvertiseService } from './advertise.service';
-import { CreateAdvertiseDto } from './dto/create-advertise.dto';
-import { UpdateAdvertiseDto } from './dto/update-advertise.dto';
+import { GetUser } from '../../user/service/get-user.decorator';
+import { User } from '../../user/models/user.entity';
+import { Advertise } from '../models/advertise.entity';
+import { AdvertiseService } from '../service/advertise.service';
+import { CreateAdvertiseDto } from '../dto/create-advertise.dto';
+import { UpdateAdvertiseDto } from '../dto/update-advertise.dto';
 
 @Controller('advertise')
 export class AdvertiseController {

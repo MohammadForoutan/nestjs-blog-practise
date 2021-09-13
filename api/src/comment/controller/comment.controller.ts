@@ -9,14 +9,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { GetUser } from '../user/get-user.decorator';
-import { User } from '../user/user.entity';
-import { CreatePostDto } from '../post/dto/create-post.dto';
-import { Comment } from './comment.entity';
-import { CommentService } from './comment.service';
-import { UpdateCommentDto } from './dto/update-comment.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { CreatePostDto } from 'src/post/dto/create-post.dto';
+import { User } from 'src/user/models/user.entity';
+import { GetUser } from 'src/user/service/get-user.decorator';
+import { UpdateCommentDto } from '../dto/update-comment.dto';
+import { Comment } from '../models/comment.entity';
+import { CommentService } from '../service/comment.service';
 
 @Controller('comment')
 export class CommentController {

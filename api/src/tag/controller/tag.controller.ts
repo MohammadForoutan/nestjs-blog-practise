@@ -7,10 +7,10 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateTagDto } from './dto/create-tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
-import { Tag } from './tag.entity';
-import { TagService } from './tag.service';
+import { CreateTagDto } from '../dto/create-tag.dto';
+import { UpdateTagDto } from '../dto/update-tag.dto';
+import { Tag } from '../models/tag.entity';
+import { TagService } from '../service/tag.service';
 
 @Controller('tag')
 export class TagController {
