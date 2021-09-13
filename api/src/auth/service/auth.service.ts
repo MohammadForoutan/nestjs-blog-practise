@@ -22,7 +22,9 @@ export class AuthService {
     private tokenRepository: TokenRepository,
   ) {}
 
-  public signUp(authCredintialsDto: AuthCredintialsDto): Promise<void> {
+  public signUp(
+    authCredintialsDto: AuthCredintialsDto,
+  ): Promise<{ id: string; username: string; role: string }> {
     return this.userRepository.createUser(authCredintialsDto);
   }
 
