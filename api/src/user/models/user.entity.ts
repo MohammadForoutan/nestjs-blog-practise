@@ -1,8 +1,8 @@
 import { Advertise } from '../../advertise/models/advertise.entity';
 import { Post } from '../../post/models/posts.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { View } from 'src/post/models/view.entity';
-import { Comment } from 'src/comment/models/comment.entity';
+import { View } from '../../post/models/view.entity';
+import { Comment } from '../../comment/models/comment.entity';
 
 export enum UserRole {
   ADMIN = 'admin',

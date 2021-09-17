@@ -1,6 +1,6 @@
-import { Comment } from 'src/comment/models/comment.entity';
-import { Tag } from 'src/tag/models/tag.entity';
-import { User } from 'src/user/models/user.entity';
+import { Comment } from '../../comment/models/comment.entity';
+import { Tag } from '../../tag/models/tag.entity';
+import { User } from '../../user/models/user.entity';
 import {
   Column,
   Entity,

@@ -11,6 +11,7 @@ import { Comment } from '../models/comment.entity';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { CreateCommentDto } from '../dto/create-comment.dto';
 import { CommentStatus } from '../models/comment-status.enum';
+import { UpdateCommentStatusDto } from '../dto/update-comment-status.dto';
 
 @EntityRepository(Comment)
 export class CommentRepository extends Repository<Comment> {
@@ -75,5 +76,19 @@ export class CommentRepository extends Repository<Comment> {
     } else {
       return this.find({ post, status: CommentStatus.ACCEPTED });
     }
+  }
+
+  public async updateOneStatus(
+    updateCommentStatusDto: UpdateCommentStatusDto,
+    id: string,
+  ): Promise<UpdateResult> {
+    const { status } = updateCommentStatusDto;
+    const comment: Comment = await this.getOneById(id);
+    const result: UpdateResult = await this.update(
+      { id: comment.id },
+      { status },
+    );
+
+    return result;
   }
 }

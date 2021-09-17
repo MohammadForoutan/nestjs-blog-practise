@@ -1,8 +1,32 @@
-import { IsNotEmpty } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateAdvertiseDto {
+  @ApiProperty({
+    required: true,
+    default: null,
+    type: String,
+  })
+  @IsDefined()
   @IsNotEmpty()
+  @IsString()
   name: string;
-  description: string;
-  media: string;
+
+  @ApiPropertyOptional({
+    default: null,
+    type: String,
+  })
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({
+    default: null,
+    type: String,
+  })
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  media?: string;
 }

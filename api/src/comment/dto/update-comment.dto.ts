@@ -1,11 +1,7 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
-import { CommentStatus } from '../models/comment-status.enum';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateCommentDto {
   @IsNotEmpty()
-  @IsOptional()
-  body?: string;
-
-  @IsOptional()
-  status?: CommentStatus;
+  @IsString()
+  body!: string;
 }

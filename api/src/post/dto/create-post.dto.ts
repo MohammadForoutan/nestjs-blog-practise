@@ -1,12 +1,37 @@
-import { IsArray, IsNotEmpty } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsDefined,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreatePostDto {
+  @ApiProperty({
+    required: true,
+    default: null,
+    type: String,
+  })
+  @IsDefined()
   @IsNotEmpty()
-  title: string;
+  @IsString()
+  title!: string;
 
+  @ApiProperty({
+    required: true,
+    default: null,
+    type: String,
+  })
+  @IsDefined()
   @IsNotEmpty()
-  body: string;
+  @IsString()
+  body!: string;
 
-  @IsArray()
+  @ApiPropertyOptional({
+    default: null,
+    type: [String],
+  })
+  @IsOptional()
   tags: string[];
 }

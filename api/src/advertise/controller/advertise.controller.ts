@@ -19,12 +19,24 @@ import { Advertise } from '../models/advertise.entity';
 import { AdvertiseService } from '../service/advertise.service';
 import { CreateAdvertiseDto } from '../dto/create-advertise.dto';
 import { UpdateAdvertiseDto } from '../dto/update-advertise.dto';
+import {
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('advertise')
 @Controller('advertise')
 export class AdvertiseController {
   constructor(private advertiseService: AdvertiseService) {}
 
   @Post()
+  @ApiCreatedResponse({ description: 'post has been created successfully.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
+  @ApiForbiddenResponse({ description: 'Forbidden !!!' })
   @hasRoles('admin')
   @UseGuards(JwtAuthGuard, RolesGuard)
   public createAdvertise(
@@ -35,11 +47,13 @@ export class AdvertiseController {
   }
 
   @Get()
+  @ApiOkResponse({ description: 'all advertise retrieve successfully.' })
   public getAllAdvertises(): Promise<Advertise[]> {
     return this.advertiseService.getAllAdvertises();
   }
 
   @Get('/:id')
+  @ApiOkResponse({ description: 'one advertise retrieves successfully.' })
   public getAdvertise(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Advertise> {
@@ -47,6 +61,11 @@ export class AdvertiseController {
   }
 
   @Delete('/:id')
+  @ApiOkResponse({ description: 'post has been deleted successfully.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
+  @ApiForbiddenResponse({
+    description: 'Forbidden !!!',
+  })
   @hasRoles('admin')
   @UseGuards(JwtAuthGuard, RolesGuard)
   public deleteAdvertise(
@@ -56,6 +75,10 @@ export class AdvertiseController {
   }
 
   @Put('/:id')
+  @ApiOkResponse({ description: 'post has been updated successfully.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
+  @ApiForbiddenResponse({ description: 'Forbidden !!!' })
+  @ApiParam({ name: 'id', required: true })
   @hasRoles('admin')
   @UseGuards(JwtAuthGuard, RolesGuard)
   public updateAdvertise(

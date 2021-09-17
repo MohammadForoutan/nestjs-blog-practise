@@ -2,13 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ViewRepotitory } from './view.repository';
 import { PostsRepository } from './posts.repository';
-import { TagRepository } from 'src/tag/service/tag.repository';
+import { TagRepository } from '../../tag/service/tag.repository';
 import { CreatePostDto } from '../dto/create-post.dto';
-import { User } from 'src/user/models/user.entity';
+import { User } from '../../user/models/user.entity';
 import { Post } from '../models/posts.entity';
-import { Tag } from 'src/tag/models/tag.entity';
+import { Tag } from '../../tag/models/tag.entity';
 import { UpdatePublishStatusDto } from '../dto/update-publish.dto';
 import { PUBLISH_STATUS } from '../models/publish-status.enum';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class PostsService {
@@ -40,8 +45,12 @@ export class PostsService {
     });
   }
 
-  public getAllPosts(): Promise<Post[]> {
-    return this.postsRepository.getAllPosts();
+  public paginate(options: IPaginationOptions): Promise<Pagination<Post>> {
+    return paginate<Post>(this.postsRepository, options).then(
+      (postsPaginable: Pagination<Post>) => {
+        return postsPaginable;
+      },
+    );
   }
 
   public async getPostById(id: string, user: User, ip: string): Promise<Post> {

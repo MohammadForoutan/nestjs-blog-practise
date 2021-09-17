@@ -1,5 +1,9 @@
 #envirement variables
-.env.*
+.env.stage.dev
+.env.stage.prod
+
+#document
+/documentation
 
 # compiled output
 /dist
