@@ -8,7 +8,7 @@ import { BadRequestException } from '@nestjs/common';
 export class UserRepository extends Repository<User> {
   public async createUser(
     authCredintialsDto: AuthCredintialsDto,
-  ): Promise<{ id: string; username: string; role: string }> {
+  ): Promise<void> {
     const { username, password } = authCredintialsDto;
 
     // if username already exist
@@ -27,9 +27,5 @@ export class UserRepository extends Repository<User> {
     const user = this.create({ username, password: hashedPassword });
 
     await this.save(user);
-
-    // eslint-disable-next-line
-    const { password: pass, ...result } = user;
-    return result;
   }
 }

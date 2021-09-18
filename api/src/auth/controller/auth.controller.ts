@@ -20,10 +20,8 @@ export class AuthController {
     description: 'user has been created/register successfully.',
   })
   @ApiBadRequestResponse({ description: 'enter correct credintials' })
-  public signUp(
-    @Body() authCredintialsDto: AuthCredintialsDto,
-  ): Promise<{ id: string; username: string; role: string }> {
-    return this.authService.signUp(authCredintialsDto);
+  public signUp(@Body() authCredintialsDto: AuthCredintialsDto): void {
+    this.authService.signUp(authCredintialsDto);
   }
 
   @ApiBadRequestResponse({ description: 'enter correct credintials' })

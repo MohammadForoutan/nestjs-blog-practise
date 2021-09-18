@@ -1,6 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 import { User } from '../../user/models/user.entity';
-import { DeleteResult, EntityRepository, Repository } from 'typeorm';
+import {
+  DeleteResult,
+  EntityRepository,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { Advertise } from '../models/advertise.entity';
 import { CreateAdvertiseDto } from '../dto/create-advertise.dto';
 import { UpdateAdvertiseDto } from '../dto/update-advertise.dto';
@@ -11,23 +16,23 @@ export class AdvertiseRepository extends Repository<Advertise> {
     createAdvertiseDto: CreateAdvertiseDto,
     user: User,
   ): Promise<Advertise> {
-    const { name, description, media } = createAdvertiseDto;
-    const advertise: Advertise = this.create({
-      name,
-      description,
-      media,
-      user,
-    });
+    const advertise: Advertise = this.create({ ...createAdvertiseDto, user });
     return this.save(advertise);
   }
 
   public async updateOne(
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto,
-  ): Promise<Advertise> {
-    const { name, description, media } = updateAdvertiseDto;
-    const advertise: Advertise = await this.getOneById(id);
-    return this.save({ ...advertise, name, description, media });
+  ): Promise<UpdateResult> {
+    const result: UpdateResult = await this.update(
+      { id },
+      { ...updateAdvertiseDto },
+    );
+
+    if (result.affected < 1) {
+      throw new NotFoundException(`advertise with ${id} id not found.`);
+    }
+    return result;
   }
 
   public async getOneById(id: string): Promise<Advertise> {
@@ -43,8 +48,11 @@ export class AdvertiseRepository extends Repository<Advertise> {
   }
 
   public async deleteOne(id: string): Promise<DeleteResult> {
-    const advertise: Advertise = await this.getOneById(id);
-    const result: DeleteResult = await this.delete({ id: advertise.id });
+    const result: DeleteResult = await this.delete({ id });
+
+    if (result.affected < 1) {
+      throw new NotFoundException(`advertise with ${id} id not found.`);
+    }
     return result;
   }
 }

@@ -35,15 +35,15 @@ export class CommentRepository extends Repository<Comment> {
 
   public async deleteOne(id: string, user: User): Promise<DeleteResult> {
     let result: DeleteResult;
-    const comment: Comment = await this.getOneById(id);
 
     if (user.role === UserRole.ADMIN) {
-      result = await this.delete({ id: comment.id });
+      result = await this.delete({ id });
     } else {
       result = await this.delete({ id, user });
-      if (result.affected < 1) {
-        throw new NotFoundException(`comment with ${id} id not found.`);
-      }
+    }
+
+    if (result.affected < 1) {
+      throw new NotFoundException(`comment with ${id} id not found.`);
     }
 
     return result;
@@ -56,9 +56,8 @@ export class CommentRepository extends Repository<Comment> {
   ): Promise<UpdateResult> {
     const { body } = updateCommentDto;
     let result: UpdateResult;
-    const comment: Comment = await this.getOneById(id);
     if (user.role === UserRole.ADMIN) {
-      result = await this.update({ id: comment.id }, { body });
+      result = await this.update({ id }, { body });
     } else {
       result = await this.update({ id, user }, { body });
     }
@@ -83,12 +82,10 @@ export class CommentRepository extends Repository<Comment> {
     id: string,
   ): Promise<UpdateResult> {
     const { status } = updateCommentStatusDto;
-    const comment: Comment = await this.getOneById(id);
-    const result: UpdateResult = await this.update(
-      { id: comment.id },
-      { status },
-    );
-
+    const result: UpdateResult = await this.update({ id }, { status });
+    if (result.affected < 1) {
+      throw new NotFoundException('comment not found');
+    }
     return result;
   }
 }

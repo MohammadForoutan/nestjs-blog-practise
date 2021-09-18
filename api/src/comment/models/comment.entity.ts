@@ -14,11 +14,9 @@ export class Comment {
   @Column({ type: 'enum', default: CommentStatus.NOT_SET, enum: CommentStatus })
   status: CommentStatus;
 
-  @ManyToOne(() => Post, (post: Post) => post.comments, { eager: false })
+  @ManyToOne(() => Post, (post: Post) => post.comments)
   post: Post;
 
-  @ManyToOne(() => User, (user: User) => user.comments, {
-    onDelete: 'SET NULL',
-  })
+  @ManyToOne(() => User, (user: User) => user.comments, { onDelete: 'CASCADE' })
   user: User;
 }

@@ -7,7 +7,7 @@ import { Post } from '../models/posts.entity';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {
-  public async createPost(
+  public createPost(
     createPostDto: CreatePostDto,
     postTags: Tag[],
     user: User,
@@ -22,20 +22,18 @@ export class PostsRepository extends Repository<Post> {
       tags: postTags,
     });
 
-    console.log({ postTags });
-
-    return await this.save(post);
+    return this.save(post);
   }
 
-  public async getAllPosts(): Promise<Post[]> {
-    return await this.find();
+  public getAllPosts(): Promise<Post[]> {
+    return this.find();
   }
 
   public getPostById(id: string, user: User): Promise<Post> {
     let post: Post;
     return this.findOne(id).then((foundPost) => {
       post = foundPost;
-      // if not found or don't show hidden post for others(not owner)
+      // if postnot found or don't show hidden post for others(not owner)
       if (!post || (post.user !== user && !post.isPublish)) {
         throw new NotFoundException(`post with ${id} not found.`);
       }
@@ -50,11 +48,9 @@ export class PostsRepository extends Repository<Post> {
     }
   }
 
-  public async toggleLike(id: string, user: User): Promise<any> {
+  public async toggleLike(id: string, user: User): Promise<void> {
     const post: Post = await this.findOne(id, { relations: ['likes'] });
     const isLiked = post.likes.find((like) => like.id === user.id);
-
-    console.log({ isLiked });
 
     // if liked
     if (isLiked) {
@@ -67,13 +63,11 @@ export class PostsRepository extends Repository<Post> {
       post.like_count = post.like_count + 1;
     }
 
-    console.log({ post });
-
-    await this.save(post);
+    this.save(post);
   }
 
   public async addView(post: Post): Promise<void> {
     post.view_count++;
-    await this.save(post);
+    this.save(post);
   }
 }

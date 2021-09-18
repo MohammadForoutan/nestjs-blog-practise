@@ -12,7 +12,7 @@ import {
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { hasRoles } from '../../auth/service/roles.decorator';
 import { RolesGuard } from '../../auth/guard/roles.guard';
-import { DeleteResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { GetUser } from '../../user/service/get-user.decorator';
 import { User } from '../../user/models/user.entity';
 import { Advertise } from '../models/advertise.entity';
@@ -57,7 +57,7 @@ export class AdvertiseController {
   public getAdvertise(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<Advertise> {
-    return this.advertiseService.getAdvertise(id);
+    return this.advertiseService.getOneAdvertise(id);
   }
 
   @Delete('/:id')
@@ -84,7 +84,7 @@ export class AdvertiseController {
   public updateAdvertise(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAdvertiseDto: UpdateAdvertiseDto,
-  ): Promise<Advertise> {
+  ): Promise<UpdateResult> {
     return this.advertiseService.updateAdvertise(id, updateAdvertiseDto);
   }
 }

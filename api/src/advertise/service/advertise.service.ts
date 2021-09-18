@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { User } from '../../user/models/user.entity';
 import { Advertise } from '../models/advertise.entity';
 import { AdvertiseRepository } from './advertise.repository';
@@ -25,7 +25,7 @@ export class AdvertiseService {
     return this.advertiseRepository.getAll();
   }
 
-  public getAdvertise(id: string): Promise<Advertise> {
+  public getOneAdvertise(id: string): Promise<Advertise> {
     return this.advertiseRepository.getOneById(id);
   }
 
@@ -36,7 +36,7 @@ export class AdvertiseService {
   public updateAdvertise(
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto,
-  ): Promise<Advertise> {
+  ): Promise<UpdateResult> {
     return this.advertiseRepository.updateOne(id, updateAdvertiseDto);
   }
 }
