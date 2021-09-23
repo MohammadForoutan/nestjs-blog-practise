@@ -9,6 +9,7 @@ async function bootstrap() {
 
   // Swagger init
   const swaggerConfig = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('blog')
     .setDescription('blog api document')
     .build();

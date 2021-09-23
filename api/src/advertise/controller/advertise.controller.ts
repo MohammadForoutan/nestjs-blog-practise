@@ -20,6 +20,7 @@ import { AdvertiseService } from '../service/advertise.service';
 import { CreateAdvertiseDto } from '../dto/create-advertise.dto';
 import { UpdateAdvertiseDto } from '../dto/update-advertise.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -34,6 +35,7 @@ export class AdvertiseController {
   constructor(private advertiseService: AdvertiseService) {}
 
   @Post()
+  @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'post has been created successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
   @ApiForbiddenResponse({ description: 'Forbidden !!!' })
@@ -61,6 +63,7 @@ export class AdvertiseController {
   }
 
   @Delete('/:id')
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'post has been deleted successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
   @ApiForbiddenResponse({
@@ -75,6 +78,7 @@ export class AdvertiseController {
   }
 
   @Put('/:id')
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'post has been updated successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
   @ApiForbiddenResponse({ description: 'Forbidden !!!' })

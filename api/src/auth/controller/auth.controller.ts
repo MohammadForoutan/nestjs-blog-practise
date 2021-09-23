@@ -5,6 +5,7 @@ import { GetToken } from '../service/get-token.decorator';
 import { JwtAuthGuard } from '../guard/jwt-auth.guard';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -36,6 +37,7 @@ export class AuthController {
     description: 'user has been created/register successfully.',
   })
   @ApiUnauthorizedResponse({ description: `user had'nt logged in` })
+  @ApiBearerAuth()
   @Post('/logout')
   @UseGuards(JwtAuthGuard)
   public logOut(@GetToken() token: string): Promise<string> {

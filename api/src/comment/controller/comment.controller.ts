@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -35,6 +36,7 @@ import { CommentService } from '../service/comment.service';
 export class CommentController {
   constructor(private commentService: CommentService) {}
 
+  @ApiBearerAuth()
   @Post('/post/:postId')
   @ApiCreatedResponse({ description: 'comment has been created successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
@@ -59,6 +61,7 @@ export class CommentController {
     return this.commentService.getPostComments(postId, user);
   }
 
+  @ApiBearerAuth()
   @Delete('/:id')
   @ApiOkResponse({ description: 'comment has been deleted successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
@@ -74,6 +77,7 @@ export class CommentController {
     this.commentService.deleteComment(id, user);
   }
 
+  @ApiBearerAuth()
   @Patch('/:id')
   @ApiOkResponse({ description: 'comment has been updated successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
@@ -87,6 +91,7 @@ export class CommentController {
     this.commentService.updateComment(updateCommentDto, id, user);
   }
 
+  @ApiBearerAuth()
   @Patch('/:id/status')
   @ApiOkResponse({ description: 'comment has been updated successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })

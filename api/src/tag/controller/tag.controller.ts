@@ -13,6 +13,7 @@ import { UpdateTagDto } from '../dto/update-tag.dto';
 import { Tag } from '../models/tag.entity';
 import { TagService } from '../service/tag.service';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -35,6 +36,7 @@ export class TagController {
     return this.tagService.getAllTags();
   }
 
+  @ApiBearerAuth()
   @Post()
   @ApiCreatedResponse({ description: 'tag has been created successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
@@ -45,6 +47,7 @@ export class TagController {
     return this.tagService.createTag(createTagDto);
   }
 
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'tag has been updated successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
   @ApiForbiddenResponse({ description: 'Forbidden !!!' })
@@ -57,6 +60,7 @@ export class TagController {
     this.tagService.updateTag(id, updateTagDto);
   }
 
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'tag has been deleted successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
   @ApiForbiddenResponse({ description: 'Forbidden !!!' })

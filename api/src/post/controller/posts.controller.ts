@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -41,6 +42,7 @@ export class PostsController {
   @ApiCreatedResponse({ description: 'post has been created successfully.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized error.' })
   @ApiBadRequestResponse({ description: 'please enter required values.' })
+  @ApiBearerAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
   public createPost(
@@ -87,6 +89,7 @@ export class PostsController {
   }
 
   // DELETE
+  @ApiBearerAuth()
   @Delete('/:id')
   @ApiParam({ name: 'id', required: true })
   @ApiOkResponse({ description: 'one post has been deleted successfully' })
@@ -104,6 +107,7 @@ export class PostsController {
   }
 
   // UPDATE / PATCH
+  @ApiBearerAuth()
   @Patch('/:id/publish-status')
   @ApiParam({ name: 'id', required: true })
   @ApiOkResponse({ description: 'one post has been deleted successfully' })
@@ -123,6 +127,7 @@ export class PostsController {
   }
 
   // UPDATE /PATCH
+  @ApiBearerAuth()
   @Patch('/:id/like')
   @ApiParam({ name: 'id', required: true })
   @ApiOkResponse({ description: 'post has been liked or disliked' })
