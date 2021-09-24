@@ -1,4 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from '../../user/models/user.entity';
 import {
   DeleteResult,
@@ -17,42 +20,59 @@ export class AdvertiseRepository extends Repository<Advertise> {
     user: User,
   ): Promise<Advertise> {
     const advertise: Advertise = this.create({ ...createAdvertiseDto, user });
-    return this.save(advertise);
+    return this.save(advertise).catch(() => {
+      throw new InternalServerErrorException();
+    });
   }
 
   public async updateOne(
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto,
   ): Promise<UpdateResult> {
-    const result: UpdateResult = await this.update(
-      { id },
-      { ...updateAdvertiseDto },
-    );
+    try {
+      const result: UpdateResult = await this.update(
+        { id },
+        { ...updateAdvertiseDto },
+      );
 
-    if (result.affected < 1) {
-      throw new NotFoundException(`advertise with ${id} id not found.`);
+      if (result.affected < 1) {
+        throw new NotFoundException(`advertise with ${id} id not found.`);
+      }
+
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
-    return result;
   }
 
   public async getOneById(id: string): Promise<Advertise> {
-    const advertise: Advertise = await this.findOne(id);
-    if (!advertise) {
-      throw new NotFoundException(`advertise with '${id} id is not found.`);
+    try {
+      const advertise: Advertise = await this.findOne(id);
+      if (!advertise) {
+        throw new NotFoundException(`advertise with '${id} id is not found.`);
+      }
+      return advertise;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
-    return advertise;
   }
 
   public getAll(): Promise<Advertise[]> {
-    return this.find();
+    return this.find().catch(() => {
+      throw new InternalServerErrorException();
+    });
   }
 
   public async deleteOne(id: string): Promise<DeleteResult> {
-    const result: DeleteResult = await this.delete({ id });
+    try {
+      const result: DeleteResult = await this.delete({ id });
 
-    if (result.affected < 1) {
-      throw new NotFoundException(`advertise with ${id} id not found.`);
+      if (result.affected < 1) {
+        throw new NotFoundException(`advertise with ${id} id not found.`);
+      }
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
-    return result;
   }
 }

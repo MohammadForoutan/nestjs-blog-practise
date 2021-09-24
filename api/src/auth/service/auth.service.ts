@@ -1,6 +1,6 @@
 import {
-  BadRequestException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,18 +29,21 @@ export class AuthService {
   public async signIn(
     authCredintialsDto: AuthCredintialsDto,
   ): Promise<{ accessToken: string }> {
-    // find user
-    const { username, password } = authCredintialsDto;
-    const user = await this.userRepository.findOne({ username });
+    try {
+      // find user
+      const { username, password } = authCredintialsDto;
+      const user = await this.userRepository.findOne({ username });
 
-    // if user not exist
-    if (!user) {
-      throw new UnauthorizedException('Please check your login credintials.');
-    }
-
-    // check password
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (isPasswordCorrect) {
+      // if user not exist
+      if (!user) {
+        throw new UnauthorizedException('Please check your login credintials.');
+      }
+      // check password
+      const isPasswordCorrect = await bcrypt.compare(password, user.password);
+      // if password is wrong
+      if (!isPasswordCorrect) {
+        throw new UnauthorizedException('Please check your login credintials.');
+      }
       // create token
       const payload: JwtPayload = { username };
       const accessToken = await this.jwtService.sign(payload);
@@ -50,21 +53,12 @@ export class AuthService {
       await this.tokenRepository.save(newToken);
 
       return { accessToken };
-      // throw error if credintials is not correct
-    } else {
-      throw new UnauthorizedException('Please check your login credintials.');
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 
-  public async logout(token: string): Promise<string> {
-    const result: DeleteResult = await this.tokenRepository.delete({
-      tokenValue: token,
-    });
-
-    if (result.affected < 1) {
-      throw new BadRequestException(`this user had not logged in`);
-    }
-
-    return 'user log out successfully';
+  public async logout(token: string): Promise<DeleteResult> {
+    return this.tokenRepository.deleteToken(token);
   }
 }

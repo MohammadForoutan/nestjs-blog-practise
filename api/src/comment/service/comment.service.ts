@@ -8,7 +8,7 @@ import { Comment } from '../models/comment.entity';
 import { CommentRepository } from './comment.repository';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { UpdateCommentStatusDto } from '../dto/update-comment-status.dto';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class CommentService {
@@ -26,21 +26,22 @@ export class CommentService {
     return this.commentRepository.createOne(createPostDto, user, post);
   }
 
-  public deleteComment(id: string, user: User): void {
-    this.commentRepository.deleteOne(id, user);
+  public deleteComment(id: string, user: User): Promise<DeleteResult> {
+    return this.commentRepository.deleteOne(id, user);
   }
 
   public updateComment(
     updateCommentDto: UpdateCommentDto,
     id: string,
     user: User,
-  ): void {
-    this.commentRepository.updateOne(updateCommentDto, user, id);
+  ): Promise<UpdateResult> {
+    return this.commentRepository.updateOne(updateCommentDto, user, id);
   }
 
-  public async getPostComments(postId: string, user: User): Promise<Comment[]> {
-    const post: Post = await this.postRepository.getPostById(postId, user);
-    return this.commentRepository.getPostComments(post, user);
+  public getPostComments(postId: string, user: User): Promise<Comment[]> {
+    return this.postRepository.getPostById(postId, user).then((post) => {
+      return this.commentRepository.getPostComments(post, user);
+    });
   }
 
   public updateCommentStatus(

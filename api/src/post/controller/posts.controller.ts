@@ -24,6 +24,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { DeleteResult } from 'typeorm';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guard/roles.guard';
 import { User } from '../../user/models/user.entity';
@@ -102,7 +103,7 @@ export class PostsController {
   public deletePost(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
-  ): void {
+  ): Promise<DeleteResult> {
     return this.postService.deletePost(id, user);
   }
 
@@ -122,7 +123,7 @@ export class PostsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() publishUpdateDto: UpdatePublishStatusDto,
     @GetUser() user: User,
-  ): Promise<void> {
+  ): Promise<PostEntity> {
     return this.postService.updatePublishStatus(id, publishUpdateDto, user);
   }
 

@@ -1,4 +1,8 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { User, UserRole } from '../../user/models/user.entity';
 import { Post } from '../../post/models/posts.entity';
 import {
@@ -26,27 +30,34 @@ export class CommentRepository extends Repository<Comment> {
   }
 
   public async getOneById(id: string): Promise<Comment> {
-    const comment: Comment = await this.findOne(id);
-    if (!comment) {
-      throw new NotFoundException(`comment with '${id} id is not found.`);
+    try {
+      const comment: Comment = await this.findOne(id);
+      if (!comment) {
+        throw new NotFoundException(`comment with '${id} id is not found.`);
+      }
+      return comment;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
-    return comment;
   }
 
   public async deleteOne(id: string, user: User): Promise<DeleteResult> {
-    let result: DeleteResult;
+    try {
+      let result: DeleteResult;
+      if (user.role === UserRole.ADMIN) {
+        result = await this.delete({ id });
+      } else {
+        result = await this.delete({ id, user });
+      }
 
-    if (user.role === UserRole.ADMIN) {
-      result = await this.delete({ id });
-    } else {
-      result = await this.delete({ id, user });
+      if (result.affected < 1) {
+        throw new NotFoundException(`comment with ${id} id not found.`);
+      }
+
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
-
-    if (result.affected < 1) {
-      throw new NotFoundException(`comment with ${id} id not found.`);
-    }
-
-    return result;
   }
 
   public async updateOne(
@@ -55,25 +66,33 @@ export class CommentRepository extends Repository<Comment> {
     id: string,
   ): Promise<UpdateResult> {
     const { body } = updateCommentDto;
-    let result: UpdateResult;
-    if (user.role === UserRole.ADMIN) {
-      result = await this.update({ id }, { body });
-    } else {
-      result = await this.update({ id, user }, { body });
-    }
 
-    if (result.affected < 1) {
-      throw new BadRequestException(`comment with this '${id}' id not found`);
-    }
+    try {
+      let result: UpdateResult;
+      if (user.role === UserRole.ADMIN) {
+        result = await this.update({ id }, { body });
+      } else {
+        result = await this.update({ id, user }, { body });
+      }
 
-    return result;
+      if (result.affected < 1) {
+        throw new BadRequestException(`comment with this '${id}' id not found`);
+      }
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   public async getPostComments(post: Post, user: User): Promise<Comment[]> {
-    if (user.role === UserRole.ADMIN) {
-      return this.find({ post });
-    } else {
-      return this.find({ post, status: CommentStatus.ACCEPTED });
+    try {
+      if (user.role === UserRole.ADMIN) {
+        return this.find({ post });
+      } else {
+        return this.find({ post, status: CommentStatus.ACCEPTED });
+      }
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 
@@ -81,11 +100,15 @@ export class CommentRepository extends Repository<Comment> {
     updateCommentStatusDto: UpdateCommentStatusDto,
     id: string,
   ): Promise<UpdateResult> {
-    const { status } = updateCommentStatusDto;
-    const result: UpdateResult = await this.update({ id }, { status });
-    if (result.affected < 1) {
-      throw new NotFoundException('comment not found');
+    try {
+      const { status } = updateCommentStatusDto;
+      const result: UpdateResult = await this.update({ id }, { status });
+      if (result.affected < 1) {
+        throw new NotFoundException(`comment with ${id} id not found.`);
+      }
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
-    return result;
   }
 }

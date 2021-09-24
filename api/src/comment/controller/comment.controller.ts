@@ -20,7 +20,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UpdateResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guard/roles.guard';
 import { CreatePostDto } from '../../post/dto/create-post.dto';
@@ -73,8 +73,8 @@ export class CommentController {
   public deletePost(
     @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
-  ): void {
-    this.commentService.deleteComment(id, user);
+  ): Promise<DeleteResult> {
+    return this.commentService.deleteComment(id, user);
   }
 
   @ApiBearerAuth()
@@ -87,8 +87,8 @@ export class CommentController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCommentDto: UpdateCommentDto,
     @GetUser() user: User,
-  ): void {
-    this.commentService.updateComment(updateCommentDto, id, user);
+  ): Promise<UpdateResult> {
+    return this.commentService.updateComment(updateCommentDto, id, user);
   }
 
   @ApiBearerAuth()

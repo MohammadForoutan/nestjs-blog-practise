@@ -24,6 +24,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { hasRoles } from 'src/auth/service/roles.decorator';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @ApiTags('tag')
 @Controller('tag')
@@ -56,8 +57,8 @@ export class TagController {
   public updateTag(
     @Param('id') id: string,
     @Body() updateTagDto: UpdateTagDto,
-  ): void {
-    this.tagService.updateTag(id, updateTagDto);
+  ): Promise<UpdateResult> {
+    return this.tagService.updateTag(id, updateTagDto);
   }
 
   @ApiBearerAuth()
@@ -66,7 +67,7 @@ export class TagController {
   @ApiForbiddenResponse({ description: 'Forbidden !!!' })
   @ApiParam({ name: 'id' })
   @Delete('/:id')
-  public deleteTag(@Param('id') id: string): Promise<string> {
+  public deleteTag(@Param('id') id: string): Promise<DeleteResult> {
     return this.tagService.deleteTag(id);
   }
 }

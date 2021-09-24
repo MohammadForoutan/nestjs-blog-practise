@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
 import { AuthCredintialsDto } from '../dto/auth-credintials.dto';
 import { GetToken } from '../service/get-token.decorator';
@@ -10,6 +16,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { DeleteResult } from 'typeorm';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -40,7 +47,10 @@ export class AuthController {
   @ApiBearerAuth()
   @Post('/logout')
   @UseGuards(JwtAuthGuard)
-  public logOut(@GetToken() token: string): Promise<string> {
+  public logOut(@GetToken() token: string): Promise<DeleteResult> {
+    if (!token) {
+      throw new BadRequestException();
+    }
     return this.authService.logout(token);
   }
 }

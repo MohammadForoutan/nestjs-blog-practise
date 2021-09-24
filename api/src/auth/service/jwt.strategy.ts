@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,13 +27,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   public async validate(payload: JwtPayload) {
     const { username } = payload;
-    const user: User = await this.userRepository.findOne({ username });
-    if (!user) {
-      throw new UnauthorizedException('Please check your login credintials.');
-    }
+    try {
+      const user: User = await this.userRepository.findOne({ username });
+      if (!user) {
+        throw new UnauthorizedException('Please check your login credintials.');
+      }
 
-    //eslint-disable-next-line
-    const { password, ...result } = user;
-    return result;
+      //eslint-disable-next-line
+      const { password, ...result } = user;
+      return result;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }
